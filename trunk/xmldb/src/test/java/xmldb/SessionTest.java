@@ -48,8 +48,8 @@ public class SessionTest extends TestCase {
         cellulare.setDettaglio("12345666767882");
         
         Contatto contatto = new Contatto();
-        contatto.setCognome("Merolli");
-        contatto.setNome("Flavio");
+        contatto.setCognome("Cognome");
+        contatto.setNome("Nome");
         contatto.setUltimaModifica(new Date());
         contatto.getDettagli().add(cellulare);
 
