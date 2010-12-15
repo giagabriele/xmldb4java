@@ -67,7 +67,6 @@ public class TransactionLogImpl implements TransactionLog, Comparable<Transactio
 
     @Override
     public void rollback(SessionLazy session) {
-    	//TODO
         Cache cache = CacheManager.getCache();
         switch (operation) {
             case PERSIST:
