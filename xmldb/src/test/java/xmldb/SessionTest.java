@@ -5,8 +5,6 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import xmldb.configuration.Configuration;
-import xmldb.criteria.Criteria;
-import xmldb.criteria.Restrictions;
 import xmldb.exception.XmlDBException;
 import xmldb.model.Cellulare;
 import xmldb.model.Contatto;
@@ -97,9 +95,4 @@ public class SessionTest extends TestCase {
 
         tx.commit();
     }
-
-
-
-    // TODO add test methods here. The name must begin with 'test'. For example:
-    // public void testHello() {}
 }

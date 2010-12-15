@@ -78,6 +78,7 @@ public class Configuration {
      * Se non presente la cache non sarà presente<br>
      * Se viene abilitata allora il sistema abiliter&acute; di default le transazioni
      * @see Cache
+     * @deprecated 
      */
     public static final String XMLDB_ENABLE_CACHE = "xmldb.enable.cache";
     protected static final Logger logger = Logger.getLogger(Configuration.class);
