@@ -166,7 +166,7 @@ public class TrasformerUtil {
             try {
                 AnnotationScanner as = AnnotationHelper.get().get(classe);
 
-                //TODO creare l'oggetto con un proxy
+                //creo l'oggetto con un proxy
 
 
                 if(logger.isDebugEnabled()){
