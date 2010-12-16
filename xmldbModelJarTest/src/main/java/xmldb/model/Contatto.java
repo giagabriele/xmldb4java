@@ -6,9 +6,7 @@ import java.util.List;
 import xmldb.annotation.Attribute;
 import xmldb.annotation.Entity;
 import xmldb.annotation.ID;
-import xmldb.annotation.ManyToOne;
 import xmldb.annotation.OneToMany;
-import xmldb.annotation.OneToOne;
 
 /**
  *
