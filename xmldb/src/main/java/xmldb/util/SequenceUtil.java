@@ -41,11 +41,14 @@ public class SequenceUtil {
      * @return int next sequence
      */
     public static int nextSequence(Class<?> classe, Session session) {
-        assert session != null : "Session is null";
         int nextValue = 1;
         try {
             classe = ClassHelper.getClass(classe.getName());
 
+            if (logger.isDebugEnabled()) {
+                logger.debug("input Classe: " + classe);
+                logger.debug("input Session: "+session);
+            }
             AnnotationScanner as = AnnotationHelper.get().get(classe);
             String nomeEntity = as.getNameEntity();
             Sequence s = null;
@@ -74,7 +77,9 @@ public class SequenceUtil {
             logger.error("Errore inatteso", e);
             throw new XmlDBException(e);
         }
-        //session.save();
+        if(logger.isDebugEnabled()){
+            logger.debug("output NextSequence: "+nextValue);
+        }
         return nextValue;
     }
 }

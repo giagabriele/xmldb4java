@@ -26,6 +26,7 @@ import java.util.zip.ZipFile;
  *
  * @author Giacomo Stefamo Gabriele
  */
+@Deprecated
 public class JarClassLoader extends ClassLoader{
 
    private final ZipFile file;

@@ -24,12 +24,14 @@ import java.util.Iterator;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.apache.log4j.Logger;
+import xmldb.Session;
 import xmldb.configuration.AnnotationScanner;
 import xmldb.util.AnnotationHelper;
+import xmldb.util.ClassHelper;
 import xmldb.util.ReflectionUtils;
 
 /**
- *
+ * Intercettore sulla {@link Session}
  * @author Giacomo Stefamo Gabriele
  */
 public class SessionCalback implements MethodInterceptor {
@@ -41,15 +43,15 @@ public class SessionCalback implements MethodInterceptor {
         if (method.getName().equals("persist") && args.length == 2) {
             try {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("args " + Arrays.toString(args));
                     logger.debug("method " + method);
+                    logger.debug("args " + Arrays.toString(args));
                 }
                 if (Boolean.FALSE.equals(args[1])) {
                     checkRelationsManyToOne(obj, args[0], proxy);
                     checkRelationsOneToMany(obj, args[0], proxy);
                 }
             } catch (Exception e) {
-                logger.error("Error", e);
+                logger.error("Errore", e);
             }
         }
         if (method.getName().equalsIgnoreCase("load") && args.length == 2) {
@@ -78,21 +80,25 @@ public class SessionCalback implements MethodInterceptor {
     }
 
     protected void checkRelationsOneToMany(Object session, Object obj, MethodProxy proxy) throws Throwable {
-        if(obj==null){
+        if (obj == null) {
             return;
         }
         AnnotationScanner as = AnnotationHelper.get().get(obj.getClass());
-        if(logger.isDebugEnabled()){
-            logger.debug("checkRelationsOneToMany class "+obj.getClass());
+        if (logger.isDebugEnabled()) {
+            logger.debug("checkRelationsOneToMany class " + obj.getClass());
         }
 
         for (Field field : as.getFieldsOneToMany()) {
             Collection<?> children = (Collection<?>) ReflectionUtils.getValue(field, obj);
             for (Iterator it = children.iterator(); it.hasNext();) {
                 Object child = it.next();
-                AnnotationScanner a = AnnotationHelper.get().get(child.getClass());
-                for(Field fChild:a.getFieldsManyToOne()){
-                    if(fChild.getType().equals(obj.getClass())){
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Class child " + child.getClass());
+                }
+                AnnotationScanner a = AnnotationHelper.get().get(ClassHelper.getClass(child));
+                for (Field fChild : a.getFieldsManyToOne()) {
+                    if (fChild.getType().equals(ClassHelper.getClass(obj))) {
+                        logger.info("Setto al figlio ["+fChild+"] il padre ["+ClassHelper.getClass(obj)+"]");
                         ReflectionUtils.setValue(fChild, child, obj);
                         break;
                     }

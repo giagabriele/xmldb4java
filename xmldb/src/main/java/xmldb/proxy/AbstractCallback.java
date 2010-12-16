@@ -23,7 +23,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * Intercettore astratto dei Model Bean
  * @author Giacomo Stefamo Gabriele
  */
 public abstract class AbstractCallback implements MethodInterceptor {
@@ -59,13 +59,23 @@ public abstract class AbstractCallback implements MethodInterceptor {
     protected String getNameField(String methodName) {
         String name = methodName.substring(3);
         name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
-        logger.debug("Field name " + name);
+        if(logger.isDebugEnabled()){
+            logger.debug("Field name " + name);
+        }
         return name;
     }
 
     protected Field getField(Object obj, String name) throws NoSuchFieldException {
         return targetClass.getDeclaredField(name);
     }
-
+    /**
+     * Metodo da implementare
+     * @param <T>
+     * @param obj
+     * @param field
+     * @param value
+     * @return the object result
+     * @throws Throwable
+     */
     public abstract <T> T intercept(Object obj, Field field, Object value) throws Throwable;
 }

@@ -37,18 +37,7 @@ import xmldb.type.Sequence;
  */
 public class TrasformerUtil {
     protected static final Logger logger = Logger.getLogger(TrasformerUtil.class);
-    /**
-     *
-     * @param classe
-     * @deprecated {@link #getAnnotationTrasformer(Class, Session)},{@link #getAnnotationTrasformer(Class, Session, boolean)}
-     * @return trasformer
-     */
-    @SuppressWarnings("unchecked")
-    @Deprecated
-    public static Trasformers getAnnotationTrasformer(Class<?> classe) {
-        return new AnnotationTrasformer(classe);
-    }
-
+   
     @SuppressWarnings("unchecked")
     public static Trasformers getAnnotationTrasformer(Class<?> classe, AbstractSession session) {
         return new AnnotationTrasformer(classe, session);
@@ -98,23 +87,16 @@ public class TrasformerUtil {
             try {
                 AnnotationScanner as = AnnotationHelper.get().get(classe);
 
-                if(logger.isDebugEnabled()){
-                    logger.debug("AnnotationScanner\t"+as);
-                }
-
                 String nameElement = as.getNameEntity();
+                if(logger.isDebugEnabled()){
+                    logger.debug("nameElement\t"+nameElement);
+                }
                 DefaultElement element = new DefaultElement(nameElement);
 
                 //add field id
                 //FIX Setto la sequence nella classe TransactionSession nei metodi persist e merge
                 String campoId = as.getId().getName();
-                /*
-                boolean isSequence = AnnotationHelper.isSequenceValueAnnotationAttributeID(classe,campoId);
-                if(isSequence){
-                element.addAttribute(campoId, String.valueOf(SequenceUtil.nextSequence(classe, session)));
-                }else{
-                element.addAttribute(campoId, ReflectionUtils.getValueField(t, campoId));
-                }*/
+                
                 element.addAttribute(campoId, String.valueOf(ReflectionUtils.getValue(as.getId(), t)));
 
                 //add other field
@@ -149,6 +131,7 @@ public class TrasformerUtil {
                     }
 
                 }
+                logger.info("trasformElement success");
 
                 return element;
             } catch (Exception e) {
@@ -167,7 +150,6 @@ public class TrasformerUtil {
                 AnnotationScanner as = AnnotationHelper.get().get(classe);
 
                 //creo l'oggetto con un proxy
-
 
                 if(logger.isDebugEnabled()){
                     logger.debug("trasformModel Class\t "+classe);
@@ -195,33 +177,7 @@ public class TrasformerUtil {
                     }
                     ReflectionUtils.setValue(field, obj, valore);
                 }
-
-//
-//                if (!lazy) {
-//                    //carico il padre
-//                    //relazioni ManyToOne
-//                    for (String field : AnnotationHelper.getFieldsAnnotatedWhit(classe, ManyToOne.class)) {
-//                        Class<? extends Object> padre = ReflectionUtils.getTypeField(obj.getClass(), field);
-//                        String nomeAttributo = AnnotationHelper.getValueAnnotationEntity(padre);
-//                        if (session instanceof SessionLazy) {
-//                            Object o = ((SessionLazy) session).load(padre, element.attributeValue(nomeAttributo), true);
-//                            ReflectionUtils.setValueField(obj, field, o);
-//                        }
-//                    }
-//
-//                    //carico tutti i figli
-//                    //relazione ManyToOne
-//                    for (String field : AnnotationHelper.getFieldsAnnotatedWhit(classe, OneToMany.class)) {
-//                        OneToMany oneToMany = (OneToMany) AnnotationHelper.getAnnotation(classe, OneToMany.class, field);
-//                        Class<? extends Object> classeFiglio = oneToMany.classe();
-//                        Criteria criteria = Criteria.createCriteria(classeFiglio);
-//                        criteria.add(Restrictions.propertyEq(AnnotationHelper.getValueAnnotationEntity(classe), element.attributeValue(campoId)));
-//                        if (session instanceof SessionLazy) {
-//                            List figli = ((SessionLazy) session).find(criteria, true);
-//                            ReflectionUtils.setValueField(obj, field, figli);
-//                        }
-//                    }
-//                }
+                logger.info("trasformModel success");
                 return obj;
             } catch (Exception e) {
                 throw new XmlDBException(e);

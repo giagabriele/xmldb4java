@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package xmldb.criteria;
+
 /**
  * 
  * @author Giacomo Stefano Gabriele
@@ -22,25 +23,25 @@ package xmldb.criteria;
  */
 public class Projection {
 
-	public enum TYPE{
-		ROW_COUNT
-	}
-	
-	protected TYPE type;
-	
-	private Projection(TYPE type){
-		this.type = type;
-	}
-	
-	public static Projection rowCount(){
-		return new Projection(TYPE.ROW_COUNT);
-	}
+    public enum TYPE {
 
-	public TYPE getType() {
-		return type;
-	}
+        ROW_COUNT
+    }
+    protected TYPE type;
 
-	public void setType(TYPE type) {
-		this.type = type;
-	}
+    private Projection(TYPE type) {
+        this.type = type;
+    }
+
+    public static Projection rowCount() {
+        return new Projection(TYPE.ROW_COUNT);
+    }
+
+    public TYPE getType() {
+        return type;
+    }
+
+    public void setType(TYPE type) {
+        this.type = type;
+    }
 }

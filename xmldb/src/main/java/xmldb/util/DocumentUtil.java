@@ -84,7 +84,7 @@ public class DocumentUtil {
         writer.write(document);
         writer.close();
 
-
+        logger.info("Documento salvato correttamente");
     }
 
 //    public static void main(String a[]){

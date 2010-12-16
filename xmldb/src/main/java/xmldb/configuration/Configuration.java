@@ -110,7 +110,7 @@ public class Configuration {
      */
     public SessionFactory getSessionFactory() {
         if (!configuration.containsKey(PATH_DB_XML)) {
-            throw new XmlDBException("La proprietà " + PATH_DB_XML + " non e' stata configurata");
+            throw new XmlDBException("La proprieta' " + PATH_DB_XML + " non e' stata configurata");
         }
         try {
 
@@ -168,17 +168,16 @@ public class Configuration {
             ResourceBundle resourceBundle = ResourceBundle.getBundle("dbxml");
             Enumeration<String> keys = resourceBundle.getKeys();
             StringBuilder sb = new StringBuilder();
+            logger.info("Configuration properties......................................................................");
             while (keys.hasMoreElements()) {
                 String key = keys.nextElement();
                 String value = resourceBundle.getString(key);
                 sb.append("[").append(key).append("]").append("->[").append(value).append("]\n");
+                logger.info("["+key+"]\t->["+value+"]");
                 setProperty(key, value);
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Configuration properties......................................................................\n" + sb.toString());
-                logger.debug("..............................................................................................");
-            }
+            logger.info("..............................................................................................");
 
         } catch (MissingResourceException e) {
             throw new XmlDBException(e);
@@ -210,7 +209,7 @@ public class Configuration {
                 }
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("Mappings.......................\n" + classi + "\n................................................");
+                logger.debug("Mappings:" + classi);
             }
         } catch (ClassNotFoundException e) {
             throw new XmlDBException(e);
