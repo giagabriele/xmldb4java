@@ -164,16 +164,16 @@ public class ReflectionUtils {
 
     public static List<Class<?>> getClassFromJar(String packname, String path, boolean all) throws ClassNotFoundException {
         if(logger.isDebugEnabled()){
-            logger.debug("path\t:"+path);
-            logger.debug("packname\t:"+packname);
-            logger.debug("all\t:"+all);
+            logger.debug("input Path: "+path);
+            logger.debug("input Packname: "+packname);
+            logger.debug("input All: "+all);
         }
         ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
         path = path.replace("!/"+packname.replace(".", "\\"), "");
         path = path.replace("!\\"+packname.replace(".", "\\"), "");//windows
         path = path.replace("file:/", "");
         path = path.replace("file:\\", "");//windows
-        logger.debug("path---->"+path);
+        logger.debug("Path: "+path);
         try {
             File file = new File(path);
             JarFile currentFile = new JarFile(file, true, JarFile.OPEN_READ);

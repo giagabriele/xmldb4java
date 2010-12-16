@@ -16,7 +16,6 @@
  */
 package xmldb.session.impl;
 
-import xmldb.exception.ObjectNotFound;
 import xmldb.type.Sequence;
 import java.util.ArrayList;
 import xmldb.exception.XmlDBException;
@@ -67,7 +66,7 @@ public abstract class AbstractSession implements SessionLazy {
 
     public void setPathDb(String pathDb) throws DocumentException {
         this.pathDb = pathDb;
-        logger.info("Path DB =>" + pathDb);
+        logger.info("Path xmldb\t" + pathDb);
         openDocument();
     }
 
@@ -135,6 +134,10 @@ public abstract class AbstractSession implements SessionLazy {
     public synchronized void delete(Class<? extends Object> classe, Object id) {
         controllaClasse(classe);
 
+        if (logger.isDebugEnabled()) {
+            logger.debug("input Classe\t" + classe);
+            logger.debug("input Id\t" + id);
+        }
         Element element = findElement(classe, id);
 
         //Intercettori onBefore
@@ -149,10 +152,8 @@ public abstract class AbstractSession implements SessionLazy {
             interceptor.onAfterDelete(classe, id);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Oggetto [" + classe + "] [" + id + "] rimosso? [" + eliminato + "]");
-        }
 
+        logger.info("delete [" + classe + "] con [" + id + "] rimosso? [" + eliminato + "]");
 
         checkAutoSave();
 
@@ -185,7 +186,6 @@ public abstract class AbstractSession implements SessionLazy {
         if (o == null) {
             return;
         }
-        
 
         Class classe = null;
         try {
@@ -193,6 +193,11 @@ public abstract class AbstractSession implements SessionLazy {
         } catch (ClassNotFoundException e) {
             logger.error("La classe [" + classe + "] non e' stata trovata!!!!", e);
             throw new XmlDBException("La classe [" + classe + "] non e' stata trovata!!!!", e);
+        }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("input Classe\t" + classe);
+            logger.debug("input Lazy\t" + lazy);
         }
 
         controllaClasse(classe);
@@ -219,9 +224,7 @@ public abstract class AbstractSession implements SessionLazy {
             } else {
                 ((Element) document.selectSingleNode("//" + ELEMENT_ENTITIES)).add(element);
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug(o.getClass().getName() + " inserito correttamente");
-                }
+                logger.info("Il record " + classe + " e' stato inserito correttamente");
             }
 
             //Intercettori onAfter
@@ -250,9 +253,14 @@ public abstract class AbstractSession implements SessionLazy {
             logger.error("La classe [" + classe + "] non e' stata trovata!!!!", e);
             throw new XmlDBException("La classe [" + classe + "] non e' stata trovata!!!!", e);
         }
-        
+
         controllaClasse(criteria.getClasse());
         String xPath = criteria.getXPathQuery();
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("input Criteria\t" + criteria);
+            logger.debug("input Lazy\t" + lazy);
+        }
 
         //Intercettori onBefore
         for (Interceptor interceptor : intercettori) {
@@ -334,14 +342,18 @@ public abstract class AbstractSession implements SessionLazy {
      * @return Un oggetto parametrizzato
      */
     public <T> T load(Class<? extends Object> classe, Object id, boolean lazy) {
-        
+
         try {
             classe = ClassHelper.getClass(classe.getName());
         } catch (ClassNotFoundException e) {
             logger.error("La classe [" + classe + "] non e' stata trovata!!!!", e);
             throw new XmlDBException("La classe [" + classe + "] non e' stata trovata!!!!", e);
         }
-
+        if (logger.isDebugEnabled()) {
+            logger.debug("input classe\t" + classe);
+            logger.debug("input Id\t" + id);
+            logger.debug("input Lazy\t" + lazy);
+        }
         controllaClasse(classe);
         try {
             String xPath = getXpathByID(classe, id);
@@ -362,7 +374,8 @@ public abstract class AbstractSession implements SessionLazy {
 
             T obj = (T) trasformers.trasformModel((Element) node);
             if (obj == null) {
-                throw new ObjectNotFound("Oggetto non trovato [" + classe + "] [" + id + "]");
+                return null;
+                //throw new ObjectNotFound("Oggetto non trovato [" + classe + "] [" + id + "]");
             }
 
             //Intercettori onAfter
@@ -374,8 +387,8 @@ public abstract class AbstractSession implements SessionLazy {
         } catch (XmlDBException e) {
             throw e;
         } catch (Exception e) {
-            logger.error("Oggetto non trovato [" + classe + "] [" + id + "]");
-            throw new ObjectNotFound("Oggetto non trovato [" + classe + "] [" + id + "]");
+            logger.error("Errore inaspettato", e);
+            throw new XmlDBException("Errore inaspettato", e);
         }
     }
 
@@ -397,6 +410,11 @@ public abstract class AbstractSession implements SessionLazy {
             throw new XmlDBException("La classe [" + classe + "] non e' stata trovata!!!!", e);
         }
 
+        if (logger.isDebugEnabled()) {
+            logger.debug("input classe\t" + classe);
+            logger.debug("input Lazy\t" + lazy);
+        }
+
         controllaClasse(o.getClass());
         Trasformers trasformers = getTrasformers(classe, true);
 
@@ -406,15 +424,16 @@ public abstract class AbstractSession implements SessionLazy {
         }
         try {
 
-            if(logger.isDebugEnabled()){
-                logger.debug("Merge Classe\t"+classe);
-            }
-
             Element element = trasformers.trasformElement(o);
             Object id = getObjectId(o);
+            if (logger.isDebugEnabled()) {
+                logger.debug("ID\t" + id);
+            }
 
             Element hold = findElement(classe, id);
-
+            if (logger.isDebugEnabled()) {
+                logger.debug("Element hold\t" + hold);
+            }
 
             //Intercettori onBefore
             for (Interceptor interceptor : intercettori) {
@@ -443,9 +462,7 @@ public abstract class AbstractSession implements SessionLazy {
                 interceptor.onAfterMerge(hold, element);
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug(o.getClass().getName() + " modificato");
-            }
+            logger.info("Il Record " + classe + "e' stato modificato");
 
             checkAutoSave();
 
@@ -528,6 +545,7 @@ public abstract class AbstractSession implements SessionLazy {
             reader.setEncoding(codifica);
             File file = new File(pathDb);
             if (!file.exists()) {
+                logger.info("Document not exist! Create...");
                 document = DocumentHelper.createDocument();
                 document.addElement(ROOT_ELEMENT);
 

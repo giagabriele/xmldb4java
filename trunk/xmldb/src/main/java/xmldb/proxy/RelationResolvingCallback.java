@@ -46,7 +46,9 @@ public class RelationResolvingCallback extends AbstractCallback {
     public <T> T intercept(Object obj, Field field, Object value) throws Throwable {
         OneToMany oneToMany = field.getAnnotation(OneToMany.class);
         if (oneToMany != null) {
-            logger.debug("Annotation OneToMany " + oneToMany);
+            if(logger.isDebugEnabled()){
+                logger.debug("Annotation OneToMany " + oneToMany);
+            }
             return (T)checkOneToMany(obj, oneToMany);
         }
         return null;

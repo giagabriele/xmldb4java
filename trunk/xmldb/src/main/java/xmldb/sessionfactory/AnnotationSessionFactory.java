@@ -130,7 +130,8 @@ public class AnnotationSessionFactory implements SessionFactory {
                     //con le transazioni
                     session = EnhancerHelper.createProxy(TransactionSession.class, new SessionCalback());
                 } else {
-                    session = EnhancerHelper.createProxy(AnnotationSession.class, new SessionCalback());
+                    //session = EnhancerHelper.createProxy(AnnotationSession.class, new SessionCalback());
+                    throw new XmlDBException("Abilitare le Transazioni!!!!");
                 }
                 AnnotationSession annotationSession = (AnnotationSession) session;
                 annotationSession.setCodifica(getCodifica());

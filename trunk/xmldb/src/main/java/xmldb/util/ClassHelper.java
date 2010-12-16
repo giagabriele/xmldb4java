@@ -34,19 +34,19 @@ public class ClassHelper {
      */
     public static Class<?> getClass(String className) throws ClassNotFoundException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Classe richiesta\t" + className);
+            logger.debug("input ClasseName\t" + className);
         }
 
         if (className.contains("$EnhancerByCGLIB$")) {
             StringTokenizer st = new StringTokenizer(className, "$");
             String x = st.nextToken();
             if (logger.isDebugEnabled()) {
-                logger.debug("Classe ritornata\t" + x);
+                logger.debug("output Classe\t" + x);
             }
             return Class.forName(x);
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("Classe ritornata\t" + className);
+                 logger.debug("output Classe\t" + className);
             }
             return Class.forName(className);
         }

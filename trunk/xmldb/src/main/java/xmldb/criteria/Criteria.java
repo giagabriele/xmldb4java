@@ -28,7 +28,6 @@ public class Criteria {
 
     private Class<? extends Object> classe;
     private StringBuilder query;
-    
     protected Projection projection;
 
     /**
@@ -152,30 +151,30 @@ public class Criteria {
     }
 
     public Projection getProjection() {
-		return projection;
-	}
+        return projection;
+    }
 
-	public void setProjection(Projection projection) {
-		this.projection = projection;
-	}
+    public void setProjection(Projection projection) {
+        this.projection = projection;
+    }
 
-	/**
+    /**
      * Ritorna la xPath equivalente al criterio
      * @return xpath
      */
     public String getXPathQuery() {
-    	if(projection!=null){
-    		switch (projection.getType()) {
-    		case ROW_COUNT:
-    			return "count("+query.toString()+")";
-    		}
-    	}
+        if (projection != null) {
+            switch (projection.getType()) {
+                case ROW_COUNT:
+                    return "count(" + query.toString() + ")";
+            }
+        }
         return query.toString();
     }
 
     @Override
     public String toString() {
-        return "CRITERIA ->"+query.toString();
+        return "Criteria Xpath: " + getXPathQuery();
     }
 
     public static Criteria createCriteria(Class<? extends Object> classe) {

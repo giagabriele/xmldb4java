@@ -126,6 +126,11 @@ public class TransactionImpl implements Transaction {
         builder.append(startTime);
         builder.append(", endTime=");
         builder.append(endTime);
+
+        builder.append(", Tempo esecuzione=");
+        builder.append(endTime-startTime);
+        builder.append(" ms");
+
         builder.append(", ");
         if (status != null) {
             builder.append("status=");
@@ -133,7 +138,7 @@ public class TransactionImpl implements Transaction {
             builder.append(", ");
         }
         if (logs != null) {
-            builder.append("\nlogs=");
+            builder.append("logs=\n");
             builder.append(logs);
             builder.append("\n");
         }

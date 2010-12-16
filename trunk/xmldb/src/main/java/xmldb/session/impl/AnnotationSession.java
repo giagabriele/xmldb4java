@@ -51,6 +51,12 @@ public class AnnotationSession extends AbstractSession {
 
     @Override
     public Element findElement(Class<?> clazz, Object id) {
+
+        if(logger.isDebugEnabled()){
+            logger.debug("input classe\t"+clazz);
+            logger.debug("input Id\t"+id);
+        }
+
         String xPath = getXpathByID(clazz, id);
         Node node = document.selectSingleNode(xPath);
         if (logger.isDebugEnabled()) {
@@ -64,6 +70,10 @@ public class AnnotationSession extends AbstractSession {
 
     @Override
     protected Object getObjectId(Object obj) {
+        if(logger.isDebugEnabled()){
+            logger.debug("input Obj\t"+obj);
+        }
+
         try{
             Class classe = ClassHelper.getClass(obj);
             AnnotationScanner as = AnnotationHelper.get().get(classe);
@@ -77,6 +87,11 @@ public class AnnotationSession extends AbstractSession {
 
      @Override
     protected String getXpathByID(Class<?> clazz, Object id) {
+
+         if(logger.isDebugEnabled()){
+            logger.debug("input classe\t"+clazz);
+            logger.debug("input Id\t"+id);
+        }
         try{
             clazz = ClassHelper.getClass(clazz.getName());
             AnnotationScanner as = AnnotationHelper.get().get(clazz);
@@ -97,6 +112,9 @@ public class AnnotationSession extends AbstractSession {
 
     @Override
     protected void controllaClasse(Class<?> classe) {
+        if(logger.isDebugEnabled()){
+            logger.debug("input classe\t"+classe);
+        }
         try{
             classe = ClassHelper.getClass(classe.getName());
             if (!mapping.contains(classe)) {
@@ -114,6 +132,9 @@ public class AnnotationSession extends AbstractSession {
 
     @Override
     protected String getNameEntity(Class<?> clazz) {
+        if(logger.isDebugEnabled()){
+            logger.debug("input classe\t"+clazz);
+        }
        try{
            clazz = ClassHelper.getClass(clazz.getName());
             AnnotationScanner as = AnnotationHelper.get().get(clazz);
