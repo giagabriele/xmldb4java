@@ -57,7 +57,7 @@ public class RelationResolvingCallback extends AbstractCallback {
         ManyToOne manyToOne = as.getAnnotationManyToOne(field);
         if(manyToOne!=null){
             if(logger.isDebugEnabled()){
-                logger.debug("Annotation ManyToOne " + oneToMany);
+                logger.debug("Annotation ManyToOne " + manyToOne);
             }
             return (T)checkManyToOne(obj);
         }
@@ -84,7 +84,7 @@ public class RelationResolvingCallback extends AbstractCallback {
         }
 
         try {
-             AnnotationScanner as = AnnotationHelper.get().get(targetClass);
+            AnnotationScanner as = AnnotationHelper.get().get(targetClass);
             Criteria criteria = Criteria.createCriteria(t.getClass());
             Object id = ReflectionUtils.getValue(as.getId(), t);
             criteria.add(Restrictions.idEq(id));
@@ -92,25 +92,26 @@ public class RelationResolvingCallback extends AbstractCallback {
             Element element = DocumentUtil.findElementById(session.getDocument(), criteria);
             for(Field field:as.getFieldsManyToOne()){
                 Class<?> classePadre = field.getType();
+
+                if(logger.isDebugEnabled()){
+                    logger.debug("classe padre:"+classePadre);
+                }
                 AnnotationScanner asPadre = AnnotationHelper.get().get(classePadre);
                 Object o = session.load(classePadre, element.attributeValue(asPadre.getNameEntity()), true);
-                field.setAccessible(true);
-                field.set(t, o);
+                 if(logger.isDebugEnabled()){
+                    logger.debug("object padre:"+o);
+                }
+                return (T)o;
+//                field.setAccessible(true);
+//                field.set(t, o);
             }
-//            for (String field : AnnotationHelper.getFieldsAnnotatedWhit(t.getClass(), ManyToOne.class)) {
-//                Class<? extends Object> padre = ReflectionUtils.getTypeField(t.getClass(), field);
-//                String nomeAttributo = AnnotationHelper.getValueAnnotationEntity(padre);
-//                Object o = session.load(padre, element.attributeValue(nomeAttributo), true);
-//                ReflectionUtils.setValueField(t, field, o);
-//
-//            }
         } catch (ElementNotFoundException e) {
             throw new XmlDBException(e);
-        } catch (IllegalAccessException e) {
-            throw new XmlDBException(e);
+//        } catch (IllegalAccessException e) {
+//            throw new XmlDBException(e);
         } catch (IllegalArgumentException e) {
             throw new XmlDBException(e);
         }
-        return t;
+        return null;
     }
 }

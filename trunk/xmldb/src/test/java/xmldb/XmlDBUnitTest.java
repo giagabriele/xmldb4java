@@ -12,7 +12,7 @@ import xmldb.configuration.Configuration;
  */
 public class XmlDBUnitTest extends Assert{
 
-    static Session session;
+    public static Session session;
 
     @BeforeClass
     public static void setUp() throws Exception {

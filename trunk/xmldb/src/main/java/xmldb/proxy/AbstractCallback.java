@@ -37,7 +37,7 @@ public abstract class AbstractCallback implements MethodInterceptor {
     }
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-        if (method.getName().startsWith("get")) {
+        if (method.getName().startsWith("get") && method.getReturnType() != Void.TYPE) {
             try {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Method " + method);
@@ -46,6 +46,7 @@ public abstract class AbstractCallback implements MethodInterceptor {
                 String name = getNameField(method.getName());
                 Field field = getField(obj, name);
                 Object value = intercept(obj, field, obj);
+                logger.info("Set to field ["+field+"] value ["+value+"]");
                 ReflectionUtils.setValue(field, obj, value);
 //                if (value != null) {
 //                    field.setAccessible(true);
