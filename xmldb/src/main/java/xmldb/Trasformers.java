@@ -22,11 +22,19 @@ import org.dom4j.Element;
  * Interfaccia parametrizzata utilizzata per trasformare una Classe in un Elemento dell'xml e viceversa
  * 
  * @author Giacomo Stefano Gabriele
- * @param <T>
+ * @param <T> tipo
  */
 public interface Trasformers<T> {
-
+    /**
+     * Trasforma un oggetto java in un oggetto Element
+     * @param t
+     * @return element
+     */
     public Element trasformElement(T t);
-
+    /**
+     * Trasforma un Element in un oggetto java
+     * @param element
+     * @return
+     */
     public T trasformModel(Element element);
 }
