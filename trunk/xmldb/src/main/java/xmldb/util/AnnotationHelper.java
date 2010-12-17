@@ -60,7 +60,12 @@ public class AnnotationHelper {
     }
 
     public AnnotationScanner get(Class<?>classe){
-        return classi.get(classe);
+        try{
+            return classi.get(ClassHelper.getClass(classe.getName()));
+        }catch(ClassNotFoundException e){
+            logger.error("La classe [" + classe + "] non e' stata trovata!!!!", e);
+            throw new XmlDBException("La classe [" + classe + "] non e' stata trovata!!!!", e);
+        }
     }
 
     /**

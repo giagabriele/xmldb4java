@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.apache.log4j.Logger;
+import xmldb.util.ReflectionUtils;
 
 /**
  * Intercettore astratto dei Model Bean
@@ -45,10 +46,11 @@ public abstract class AbstractCallback implements MethodInterceptor {
                 String name = getNameField(method.getName());
                 Field field = getField(obj, name);
                 Object value = intercept(obj, field, obj);
-                if (value != null) {
-                    field.setAccessible(true);
-                    field.set(obj, value);
-                }
+                ReflectionUtils.setValue(field, obj, value);
+//                if (value != null) {
+//                    field.setAccessible(true);
+//                    field.set(obj, value);
+//                }
             } catch (Exception e) {
                 logger.error("Errore", e);
             }

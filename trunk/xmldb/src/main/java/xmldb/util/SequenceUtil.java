@@ -19,7 +19,6 @@ package xmldb.util;
 import org.apache.log4j.Logger;
 import xmldb.Session;
 import xmldb.configuration.AnnotationScanner;
-import xmldb.exception.ObjectNotFound;
 import xmldb.exception.XmlDBException;
 import xmldb.session.impl.SessionLazy;
 import xmldb.type.Sequence;
@@ -43,7 +42,7 @@ public class SequenceUtil {
     public static int nextSequence(Class<?> classe, Session session) {
         int nextValue = 1;
         try {
-            classe = ClassHelper.getClass(classe.getName());
+            //classe = ClassHelper.getClass(classe.getName());
 
             if (logger.isDebugEnabled()) {
                 logger.debug("input Classe: " + classe);
@@ -52,15 +51,13 @@ public class SequenceUtil {
             AnnotationScanner as = AnnotationHelper.get().get(classe);
             String nomeEntity = as.getNameEntity();
             Sequence s = null;
-            try {
-                if (session instanceof SessionLazy) {
-                    s = ((SessionLazy) session).load(Sequence.class, nomeEntity, true);
-                } else {
-                    s = session.load(Sequence.class, nomeEntity);
-                }
-
-            } catch (ObjectNotFound e) {
+            
+            if (session instanceof SessionLazy) {
+                s = ((SessionLazy) session).load(Sequence.class, nomeEntity, true);
+            } else {
+                s = session.load(Sequence.class, nomeEntity);
             }
+
             if (s == null) {
                 s = new Sequence();
                 s.setId(nomeEntity);
@@ -70,9 +67,9 @@ public class SequenceUtil {
 
             s.setSequence(nextValue);
             ((SessionLazy) session).merge(s, false);
-        } catch (ClassNotFoundException e) {
-            logger.error("La classe [" + classe + "] non e' stata trovata!!!!", e);
-            throw new XmlDBException("La classe [" + classe + "] non e' stata trovata!!!!", e);
+//        } catch (ClassNotFoundException e) {
+//            logger.error("La classe [" + classe + "] non e' stata trovata!!!!", e);
+//            throw new XmlDBException("La classe [" + classe + "] non e' stata trovata!!!!", e);
         } catch (Exception e) {
             logger.error("Errore inatteso", e);
             throw new XmlDBException(e);
