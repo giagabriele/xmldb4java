@@ -69,7 +69,11 @@ public abstract class AbstractCallback implements MethodInterceptor {
     }
 
     protected Field getField(Object obj, String name) throws NoSuchFieldException {
-        return targetClass.getDeclaredField(name);
+        try{
+            return targetClass.getDeclaredField(name);
+        }catch(NoSuchFieldException e){
+            return targetClass.getSuperclass().getDeclaredField(name);
+        }
     }
     /**
      * Metodo da implementare
