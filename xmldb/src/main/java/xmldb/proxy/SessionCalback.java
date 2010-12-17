@@ -40,11 +40,11 @@ public class SessionCalback implements MethodInterceptor {
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 
-        if (method.getName().equals("persist") && args.length == 2) {
+        if ((method.getName().equals("persist") || method.getName().equals("merge")) && args.length == 2) {
             try {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("method " + method);
-                    logger.debug("args " + Arrays.toString(args));
+                    logger.debug("input Method " + method);
+                    logger.debug("input Args " + Arrays.toString(args));
                 }
                 if (Boolean.FALSE.equals(args[1])) {
                     checkRelationsManyToOne(obj, args[0], proxy);
@@ -74,8 +74,10 @@ public class SessionCalback implements MethodInterceptor {
         AnnotationScanner as = AnnotationHelper.get().get(obj.getClass());
         for (Field field : as.getFieldsManyToOne()) {
             Object padre = ReflectionUtils.getValue(field, obj);
-            proxy.invokeSuper(session, new Object[]{padre, true});
-            ReflectionUtils.setValue(field, obj, padre);
+            if(padre!=null){
+                proxy.invokeSuper(session, new Object[]{padre, true});
+                ReflectionUtils.setValue(field, obj, padre);
+            }
         }
     }
 
@@ -95,7 +97,7 @@ public class SessionCalback implements MethodInterceptor {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Class child " + child.getClass());
                 }
-                AnnotationScanner a = AnnotationHelper.get().get(ClassHelper.getClass(child));
+                AnnotationScanner a = AnnotationHelper.get().get(child.getClass());
                 for (Field fChild : a.getFieldsManyToOne()) {
                     if (fChild.getType().equals(ClassHelper.getClass(obj))) {
                         logger.info("Setto al figlio ["+fChild+"] il padre ["+ClassHelper.getClass(obj)+"]");

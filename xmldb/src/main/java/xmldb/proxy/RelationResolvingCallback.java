@@ -18,6 +18,7 @@ package xmldb.proxy;
 
 import java.lang.reflect.Field;
 import org.dom4j.Element;
+import xmldb.annotation.ManyToOne;
 import xmldb.annotation.OneToMany;
 import xmldb.configuration.AnnotationScanner;
 import xmldb.criteria.Criteria;
@@ -44,12 +45,21 @@ public class RelationResolvingCallback extends AbstractCallback {
 
     @Override
     public <T> T intercept(Object obj, Field field, Object value) throws Throwable {
-        OneToMany oneToMany = field.getAnnotation(OneToMany.class);
-        if (oneToMany != null) {
+
+        AnnotationScanner as = AnnotationHelper.get().get(obj.getClass());
+        OneToMany oneToMany = as.getAnnotationOneToMany(field);
+        if(oneToMany!=null){
             if(logger.isDebugEnabled()){
                 logger.debug("Annotation OneToMany " + oneToMany);
             }
             return (T)checkOneToMany(obj, oneToMany);
+        }
+        ManyToOne manyToOne = as.getAnnotationManyToOne(field);
+        if(manyToOne!=null){
+            if(logger.isDebugEnabled()){
+                logger.debug("Annotation ManyToOne " + oneToMany);
+            }
+            return (T)checkManyToOne(obj);
         }
         return null;
     }
@@ -69,6 +79,10 @@ public class RelationResolvingCallback extends AbstractCallback {
     protected <T> T checkManyToOne(T t) {
         //carico il padre
         //relazioni ManyToOne
+        if(logger.isDebugEnabled()){
+            logger.debug("input T:"+t);
+        }
+
         try {
              AnnotationScanner as = AnnotationHelper.get().get(targetClass);
             Criteria criteria = Criteria.createCriteria(t.getClass());

@@ -20,16 +20,12 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 import xmldb.configuration.AnnotationScanner;
-
-import xmldb.exception.ObjectNotFound;
-import xmldb.exception.XmlDBException;
 import xmldb.transaction.Transaction;
 import xmldb.transaction.TransactionHelper;
 import xmldb.transaction.TransactionLog;
 import xmldb.transaction.TransactionNotActiveException;
 import xmldb.transaction.Transaction.Status;
 import xmldb.util.AnnotationHelper;
-import xmldb.util.ClassHelper;
 import xmldb.util.ReflectionUtils;
 import xmldb.util.SequenceUtil;
 
@@ -73,11 +69,7 @@ public class TransactionSession extends AnnotationSession {
     public synchronized void delete(Class<? extends Object> classe, Object id) {
         if (getCurrentTransaction() != null && getCurrentTransaction().getStatus().equals(Status.ACTIVE)) {
 
-            Object obj = null;
-            try {
-                obj = load(classe, id, true);
-            } catch (ObjectNotFound e) {
-            }
+            Object obj = load(classe, id, true);  
 
             TransactionLog txLog = TransactionHelper.getTransactionLogDelete(classe, id, obj);
 
@@ -108,24 +100,18 @@ public class TransactionSession extends AnnotationSession {
         }
 
         if (getCurrentTransaction() != null && getCurrentTransaction().getStatus().equals(Status.ACTIVE)) {
-            AnnotationScanner as = null;
-            try {
-                as = AnnotationHelper.get().get(ClassHelper.getClass(o));
-            } catch (ClassNotFoundException e) {
-                throw new XmlDBException("Classe non trovata!!!",e);
-            }
+            AnnotationScanner as = AnnotationHelper.get().get(o.getClass());
+           
             Object id = ReflectionUtils.getValue(as.getId(), o);
 
-            Object obj = null;
-            try {
-                obj = load(o.getClass(), id, true);
-            } catch (ObjectNotFound e) {
-
+            Object obj = load(o.getClass(), id, true);
+            if(obj == null){
                 if (as.isSequence()) {
                     int nextId = SequenceUtil.nextSequence(o.getClass(), this);
                     ReflectionUtils.setValue(as.getId(), o, nextId);
                 }
             }
+            
 
             TransactionLog txLog = TransactionHelper.getTransactionLogMerge(o, obj);
             getCurrentTransaction().addTransactionLog(txLog);
@@ -138,6 +124,10 @@ public class TransactionSession extends AnnotationSession {
 
     @Override
     public synchronized void persist(Object o, boolean lazy) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("input Oggetto\t" + o);
+            logger.debug("input Lazy\t" + lazy);
+        }
         if (getCurrentTransaction() != null && getCurrentTransaction().getStatus().equals(Status.ACTIVE)) {
             AnnotationScanner as = AnnotationHelper.get().get(o.getClass());
 

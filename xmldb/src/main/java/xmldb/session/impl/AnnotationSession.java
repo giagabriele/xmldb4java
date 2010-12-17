@@ -38,9 +38,7 @@ public class AnnotationSession extends AbstractSession {
     private Set<Class<?>> mapping;
 
     public AnnotationSession() {
-        
     }
-    
 
     public void setMapping(Set<Class<?>> mapping) {
         this.mapping = mapping;
@@ -52,9 +50,9 @@ public class AnnotationSession extends AbstractSession {
     @Override
     public Element findElement(Class<?> clazz, Object id) {
 
-        if(logger.isDebugEnabled()){
-            logger.debug("input classe\t"+clazz);
-            logger.debug("input Id\t"+id);
+        if (logger.isDebugEnabled()) {
+            logger.debug("input classe\t" + clazz);
+            logger.debug("input Id\t" + id);
         }
 
         String xPath = getXpathByID(clazz, id);
@@ -62,7 +60,7 @@ public class AnnotationSession extends AbstractSession {
         if (logger.isDebugEnabled()) {
             logger.debug("Xpath [" + xPath + "]");
         }
-        if(node == null){
+        if (node == null) {
             return null;
         }
         return (Element) node;
@@ -70,58 +68,47 @@ public class AnnotationSession extends AbstractSession {
 
     @Override
     protected Object getObjectId(Object obj) {
-        if(logger.isDebugEnabled()){
-            logger.debug("input Obj\t"+obj);
+        if (logger.isDebugEnabled()) {
+            logger.debug("input Obj\t" + obj);
         }
 
-        try{
-            Class classe = ClassHelper.getClass(obj);
-            AnnotationScanner as = AnnotationHelper.get().get(classe);
-            return ReflectionUtils.getValue(as.getId(), obj);
-        }catch(ClassNotFoundException e){
-            logger.error("La classe [" + obj.getClass() + "] non e' stata trovata!!!!", e);
-            throw new XmlDBException("La classe [" +  obj.getClass() + "] non e' stata trovata!!!!", e);
-        }
+        AnnotationScanner as = AnnotationHelper.get().get(obj.getClass());
+        return ReflectionUtils.getValue(as.getId(), obj);
     }
 
-
-     @Override
+    @Override
     protected String getXpathByID(Class<?> clazz, Object id) {
 
-         if(logger.isDebugEnabled()){
-            logger.debug("input classe\t"+clazz);
-            logger.debug("input Id\t"+id);
+        if (logger.isDebugEnabled()) {
+            logger.debug("input classe\t" + clazz);
+            logger.debug("input Id\t" + id);
         }
-        try{
-            clazz = ClassHelper.getClass(clazz.getName());
-            AnnotationScanner as = AnnotationHelper.get().get(clazz);
-            StringBuilder sb = new StringBuilder();
-            sb.append("//");
-            sb.append(as.getNameEntity());
-            sb.append("[@").append(as.getId().getName()).append("='");
-            sb.append(String.valueOf(id)).append("']");
 
-            String xPath = sb.toString();
+        AnnotationScanner as = AnnotationHelper.get().get(clazz);
+        StringBuilder sb = new StringBuilder();
+        sb.append("//");
+        sb.append(as.getNameEntity());
+        sb.append("[@").append(as.getId().getName()).append("='");
+        sb.append(String.valueOf(id)).append("']");
 
-            return xPath;
-         }catch(ClassNotFoundException e){
-            logger.error("La classe [" + clazz+ "] non e' stata trovata!!!!", e);
-            throw new XmlDBException("La classe [" +  clazz+ "] non e' stata trovata!!!!", e);
-        }
+        String xPath = sb.toString();
+
+        return xPath;
     }
 
     @Override
     protected void controllaClasse(Class<?> classe) {
-        if(logger.isDebugEnabled()){
-            logger.debug("input classe\t"+classe);
+        if (logger.isDebugEnabled()) {
+            logger.debug("input classe\t" + classe);
         }
-        try{
+
+        try {
             classe = ClassHelper.getClass(classe.getName());
             if (!mapping.contains(classe)) {
                 throw new XmlDBException("La classe [" + classe + "] non e' mappata!!!!");
             }
-        }catch(ClassNotFoundException e){
-            throw new XmlDBException("La classe [" + classe + "] non e' mappata!!!!",e);
+        } catch (ClassNotFoundException e) {
+            throw new XmlDBException("La classe [" + classe + "] non e' mappata!!!!", e);
         }
     }
 
@@ -132,16 +119,12 @@ public class AnnotationSession extends AbstractSession {
 
     @Override
     protected String getNameEntity(Class<?> clazz) {
-        if(logger.isDebugEnabled()){
-            logger.debug("input classe\t"+clazz);
+        if (logger.isDebugEnabled()) {
+            logger.debug("input classe\t" + clazz);
         }
-       try{
-           clazz = ClassHelper.getClass(clazz.getName());
-            AnnotationScanner as = AnnotationHelper.get().get(clazz);
-            return as.getNameEntity();
-        }catch(ClassNotFoundException e){
-            logger.error("La classe [" + clazz + "] non e' stata trovata!!!!", e);
-            throw new XmlDBException("La classe [" + clazz + "] non e' stata trovata!!!!", e);
-        }
+
+        AnnotationScanner as = AnnotationHelper.get().get(clazz);
+        return as.getNameEntity();
+
     }
 }
