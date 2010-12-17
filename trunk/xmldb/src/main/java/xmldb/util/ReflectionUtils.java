@@ -123,8 +123,7 @@ public class ReflectionUtils {
             try{
                 return clazz.getSuperclass().cast(value);
             }catch(ClassCastException eee){
-                 eee.printStackTrace();
-                //logger.error("Errore", e);
+                logger.error("Errore", eee);
                 return value;
             }
         }
