@@ -71,6 +71,9 @@ public class ReflectionUtils {
      */
     public static void setValue(Field field,Object obj,Object value){
         try{
+            if(value == null){
+                return;
+            }
             field.setAccessible(true);
             value = getValue(field.getType(), value);
             field.set(obj, value);
@@ -85,6 +88,14 @@ public class ReflectionUtils {
      * @return
      */
     protected static Object getValue(Class<?> clazz, Object value) {
+        if(logger.isDebugEnabled()){
+            logger.debug("input Clazz:"+clazz);
+            logger.debug("input value:"+value);
+        }
+        if(value==null){
+            return null;
+        }
+
         if (clazz.toString().equals("int")) {
             return Integer.parseInt(String.valueOf(value));
         }
@@ -100,11 +111,24 @@ public class ReflectionUtils {
             Timestamp st = new Timestamp(Long.parseLong(String.valueOf(value)));
             return new Date(st.getTime());
         }
-        try{
-            return clazz.cast(String.valueOf(value));
-        }catch(ClassCastException e){
-            return clazz.cast(value);
+        if(clazz.equals(String.class)){
+            return String.valueOf(value);
         }
+//        try{
+//            return clazz.cast(String.valueOf(value));
+//        }catch(ClassCastException e){
+        try{
+            return clazz.cast(value);
+        }catch(ClassCastException ee){
+            try{
+                return clazz.getSuperclass().cast(value);
+            }catch(ClassCastException eee){
+                 eee.printStackTrace();
+                //logger.error("Errore", e);
+                return value;
+            }
+        }
+//        }
     }
 
 

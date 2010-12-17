@@ -37,6 +37,8 @@ import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
 import xmldb.Session;
 import xmldb.Trasformers;
+import xmldb.configuration.AnnotationScanner;
+import xmldb.util.AnnotationHelper;
 import xmldb.util.ClassHelper;
 import static xmldb.XmlDBConstants.UTF8;
 import static xmldb.XmlDBConstants.ELEMENT_ENTITIES;
@@ -202,6 +204,7 @@ public abstract class AbstractSession implements SessionLazy {
 
         controllaClasse(classe);
 
+        AnnotationScanner as = AnnotationHelper.get().get(classe);
         Trasformers trasformers = getTrasformers(classe, lazy);
 
         if (trasformers == null) {
@@ -209,7 +212,7 @@ public abstract class AbstractSession implements SessionLazy {
             throw new XmlDBException("Errore the trasformer is null");
         }
         Element element = trasformers.trasformElement(o);
-        boolean exist = existElement(classe, element);
+        boolean exist = existElement(classe, element.attributeValue(as.getId().getName()));
 
         if (!exist) {
             //Intercettori onBefore
