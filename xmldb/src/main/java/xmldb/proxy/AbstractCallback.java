@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.apache.log4j.Logger;
+import xmldb.configuration.AnnotationScanner;
+import xmldb.util.AnnotationHelper;
 import xmldb.util.ReflectionUtils;
 
 /**
@@ -45,13 +47,12 @@ public abstract class AbstractCallback implements MethodInterceptor {
                 }
                 String name = getNameField(method.getName());
                 Field field = getField(obj, name);
-                Object value = intercept(obj, field, obj);
-                logger.info("Set to field ["+field+"] value ["+value+"]");
-                ReflectionUtils.setValue(field, obj, value);
-//                if (value != null) {
-//                    field.setAccessible(true);
-//                    field.set(obj, value);
-//                }
+                AnnotationScanner as = AnnotationHelper.get().get(obj.getClass());
+                if(as.getAnnotationManyToOne(field)!=null ||as.getAnnotationOneToMany(field)!=null){
+                    Object value = intercept(obj, field, obj);
+                    logger.info("Set to field ["+field+"] value ["+value+"]");
+                    ReflectionUtils.setValue(field, obj, value);
+                }
             } catch (Exception e) {
                 logger.error("Errore", e);
             }

@@ -68,7 +68,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>xmldb</groupId>
             <artifactId>xmldbModelJar</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
