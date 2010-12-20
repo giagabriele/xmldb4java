@@ -43,14 +43,15 @@ import xmldb.exception.XmlDBException;
 public class ReflectionUtils {
 
     private static final Logger logger = Logger.getLogger(ReflectionUtils.class);
+
     /**
      * Ritorna il valore del field dell'oggetto obj
      * @param field
      * @param obj
      * @return the value
      */
-    public static Object getValue(Field field,Object obj){
-        try{
+    public static Object getValue(Field field, Object obj) {
+        try {
             field.setAccessible(true);
 
             Object o = field.get(obj);
@@ -59,28 +60,30 @@ public class ReflectionUtils {
                 return String.valueOf(date.getTime());
             }
             return o;
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new XmlDBException(e);
         }
     }
+
     /**
      * Set the value into object's field
      * @param field
      * @param obj
      * @param value
      */
-    public static void setValue(Field field,Object obj,Object value){
-        try{
-            if(value == null){
+    public static void setValue(Field field, Object obj, Object value) {
+        try {
+            if (value == null) {
                 return;
             }
             field.setAccessible(true);
             value = getValue(field.getType(), value);
             field.set(obj, value);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new XmlDBException(e);
         }
     }
+
     /**
      * Converte il valore in tipo di
      * @param clazz
@@ -88,11 +91,11 @@ public class ReflectionUtils {
      * @return
      */
     protected static Object getValue(Class<?> clazz, Object value) {
-        if(logger.isDebugEnabled()){
-            logger.debug("input Clazz:"+clazz);
-            logger.debug("input value:"+value);
+        if (logger.isDebugEnabled()) {
+            logger.debug("input Clazz:" + clazz);
+            logger.debug("input value:" + value);
         }
-        if(value==null){
+        if (value == null) {
             return null;
         }
 
@@ -107,29 +110,29 @@ public class ReflectionUtils {
         }
         if (clazz.toString().equals("float")) {
             return Float.parseFloat(String.valueOf(value));
-        }if (clazz.equals(Date.class)) {
+        }
+        if (clazz.equals(Date.class)) {
             Timestamp st = new Timestamp(Long.parseLong(String.valueOf(value)));
             return new Date(st.getTime());
         }
-        if(clazz.equals(String.class)){
+        if (clazz.equals(String.class)) {
             return String.valueOf(value);
         }
 //        try{
 //            return clazz.cast(String.valueOf(value));
 //        }catch(ClassCastException e){
-        try{
+        try {
             return clazz.cast(value);
-        }catch(ClassCastException ee){
-            try{
+        } catch (ClassCastException ee) {
+            try {
                 return clazz.getSuperclass().cast(value);
-            }catch(ClassCastException eee){
+            } catch (ClassCastException eee) {
                 logger.error("Errore", eee);
                 return value;
             }
         }
 //        }
     }
-
 
     /**
      * Attempts to list all the classes in the specified package as determined
@@ -186,31 +189,31 @@ public class ReflectionUtils {
     }
 
     public static List<Class<?>> getClassFromJar(String packname, String path, boolean all) throws ClassNotFoundException {
-        if(logger.isDebugEnabled()){
-            logger.debug("input Path: "+path);
-            logger.debug("input Packname: "+packname);
-            logger.debug("input All: "+all);
+        if (logger.isDebugEnabled()) {
+            logger.debug("input Path: " + path);
+            logger.debug("input Packname: " + packname);
+            logger.debug("input All: " + all);
         }
         ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
-        path = path.replace("!/"+packname.replace(".", "\\"), "");
-        path = path.replace("!\\"+packname.replace(".", "\\"), "");//windows
+        path = path.replace("!/" + packname.replace(".", "\\"), "");
+        path = path.replace("!\\" + packname.replace(".", "\\"), "");//windows
         path = path.replace("file:/", "");
         path = path.replace("file:\\", "");//windows
-        logger.debug("Path: "+path);
+        logger.debug("Path: " + path);
         try {
             File file = new File(path);
             JarFile currentFile = new JarFile(file, true, JarFile.OPEN_READ);
-           
+
             ClassLoader cld = Thread.currentThread().getContextClassLoader();
 
 
             for (Enumeration e = currentFile.entries(); e.hasMoreElements();) {
                 JarEntry current = (JarEntry) e.nextElement();
                 if (!current.isDirectory() && current.getName().startsWith(packname.replace(".", "/"))) {
-                    if(logger.isDebugEnabled()){
-                        logger.debug("Jar Class: " +current);
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Jar Class: " + current);
                     }
-                    Class<?> classe = Class.forName(current.getName().replaceAll("/", ".").replace(".class", ""),false, cld);
+                    Class<?> classe = Class.forName(current.getName().replaceAll("/", ".").replace(".class", ""), false, cld);
                     if (AnnotationHelper.hasAnnotationEntity(classe) || all) {
                         classes.add(classe);
                     }
@@ -222,33 +225,4 @@ public class ReflectionUtils {
         }
         return classes;
     }
-
-
-//    public static List<Class<? extends Object>> getClassesFromFileJarFile(String pckgname, String baseDirPath) throws ClassNotFoundException {
-//        ArrayList<Class<? extends Object>> classes = new ArrayList<Class<? extends Object>>();
-//        String path = pckgname.replace('.', '/') + "/";
-//        File mF = new File(baseDirPath);
-//        String[] files = mF.list();
-//        ArrayList jars = new ArrayList();
-//        for (int i = 0; i < files.length; i++) {
-//            if (files[i].endsWith(".jar")) {
-//                jars.add(files[i]);
-//            }
-//        }
-//
-//        for (int i = 0; i < jars.size(); i++) {
-//            try {
-//                JarFile currentFile = new JarFile(jars.get(i).toString());
-//                for (Enumeration e = currentFile.entries(); e.hasMoreElements();) {
-//                    JarEntry current = (JarEntry) e.nextElement();
-//                    if (current.getName().length() > path.length() && current.getName().substring(0, path.length()).equals(path) && current.getName().endsWith(".class")) {
-//                        classes.add(Class.forName(current.getName().replaceAll("/", ".").replace(".class", "")));
-//                    }
-//                }
-//            } catch (IOException e) {
-//                logger.error("Errore Inatteso", e);
-//            }
-//        }
-//        return classes;
-//    }
 }
