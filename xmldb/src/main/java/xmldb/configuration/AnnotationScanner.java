@@ -251,7 +251,7 @@ public class AnnotationScanner {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Classe\t\t").append(classe);
+        sb.append("Classe\t").append(classe);
         sb.append("\nNome Entity\t").append(nameEntity);
         sb.append("\n\tID:").append(id);
         for (PairAnnotationField pair : attributes) {
