@@ -17,22 +17,14 @@ public class EnhancerHelperTest extends XmlDBUnitTest{
      * Test of createProxy method, of class EnhancerHelper.
      */
     @Test
-    public void testCreateProxy() {
+    public void testCreateProxy() throws InstantiationException, IllegalAccessException {
         System.out.println("createProxy");
-        Class<?> targetClass = Cellulare.class;
+        Class targetClass = Cellulare.class;
         Callback callback = new RelationResolvingCallback(targetClass, (AbstractSession)session);
         Object result = EnhancerHelper.createProxy(targetClass, callback);
-        System.out.println("result:"+result);
+        System.out.println("result:"+result);        
 
-        Dettaglio dettaglio = new Dettaglio();
-        System.out.println("class to cast:"+dettaglio.getClass());
-
-        Dettaglio obj = dettaglio.getClass().cast(result);
-        System.out.println("obj:"+obj);
-
-        
-
-        //assertTrue(dettaglio.getClass().equals(obj.getClass()));
+        assertTrue(targetClass.isInstance(result));
     }
 
 }
