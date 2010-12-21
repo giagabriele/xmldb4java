@@ -16,6 +16,8 @@
  */
 package xmldb.criteria;
 
+import org.apache.log4j.Logger;
+import xmldb.annotation.Attribute;
 import xmldb.configuration.AnnotationScanner;
 import xmldb.util.AnnotationHelper;
 
@@ -26,9 +28,11 @@ import xmldb.util.AnnotationHelper;
  */
 public class Criteria {
 
+    protected static final Logger logger = Logger.getLogger(Criteria.class);
     private Class<? extends Object> classe;
     private StringBuilder query;
     protected Projection projection;
+    protected AnnotationScanner as = null;
 
     /**
      * Costruttore privato
@@ -36,16 +40,11 @@ public class Criteria {
      */
     private Criteria(Class<? extends Object> classe) {
         this.classe = classe;
-        String select = classe.getSimpleName();
-        try {
-            select = AnnotationHelper.get().get(classe).getNameEntity();
-        } catch (Exception e) {
-            //v1 senza annotation
-        }
+        this.as = AnnotationHelper.get().get(classe);
 
+        String select = as.getNameEntity();
         query = new StringBuilder();
         query.append("//").append(select);
-
     }
 
     public Criteria add(Restrictions restrictions) {
@@ -85,24 +84,15 @@ public class Criteria {
      */
     Criteria create(Class<? extends Object> classe) {
         this.classe = classe;
-        String select = classe.getSimpleName();
-        try {
-            select = AnnotationHelper.get().get(classe).getNameEntity();
-        } catch (Exception e) {
-            //v1 senza annotation
-        }
+        String select = AnnotationHelper.get().get(classe).getNameEntity();
+
         query.append("/").append(select);
         return this;
     }
 
     protected void addIdEq(Restrictions restrictions) {
         query.append("[@");
-        try {
-            AnnotationScanner as = AnnotationHelper.get().get(classe);
-            query.append(as.getId().getName());
-        } catch (Exception e) {
-            query.append("id");
-        }
+        query.append(as.getId().getName());
 
         query.append("='");
         query.append(restrictions.getValue());
@@ -110,40 +100,96 @@ public class Criteria {
     }
 
     protected void addEq(Restrictions restrictions) {
-        try {
-
-            query.append("[@");
-            query.append(restrictions.getProperty());
-            query.append("='");
-            query.append(restrictions.getValue());
-            query.append("']");
-
-        } catch (Exception e) {
+        if (as.isAnnotatedWithAttribute(restrictions.getProperty())) {
+            Attribute attribute = as.getAnnotation(restrictions.getProperty());
+            if (attribute != null) {
+                if (attribute.tipo().equals(Attribute.TIPO.ELEMENT)) {
+                    query.append("/");
+                    query.append(restrictions.getProperty());
+                    query.append("[text()='");
+                    query.append(restrictions.getValue());
+                    query.append("']/parent::node()");
+                    return;
+                } else {
+                    query.append("[@");
+                    query.append(restrictions.getProperty());
+                    query.append("='");
+                    query.append(restrictions.getValue());
+                    query.append("']");
+                }
+            }
         }
+
+    }
+
+    protected void addOR(Restrictions r1, Restrictions r2) {
     }
 
     protected void addGT(Restrictions restrictions) {
-        query.append("[@");
-        query.append(restrictions.getProperty());
-        query.append(">");
-        query.append(restrictions.getValue());
-        query.append("]");
+        if (as.isAnnotatedWithAttribute(restrictions.getProperty())) {
+            Attribute attribute = as.getAnnotation(restrictions.getProperty());
+            if (attribute != null) {
+                if (attribute.tipo().equals(Attribute.TIPO.ELEMENT)) {
+                    query.append("/");
+                    query.append(restrictions.getProperty());
+                    query.append("[text()>");
+                    query.append(restrictions.getValue());
+                    query.append("]/parent::node()");
+                    return;
+                } else {
+                    query.append("[@");
+                    query.append(restrictions.getProperty());
+                    query.append(">");
+                    query.append(restrictions.getValue());
+                    query.append("]");
+                }
+            }
+        }
     }
 
     protected void addLT(Restrictions restrictions) {
-        query.append("[@");
-        query.append(restrictions.getProperty());
-        query.append("<");
-        query.append(restrictions.getValue());
-        query.append("]");
+        if (as.isAnnotatedWithAttribute(restrictions.getProperty())) {
+            Attribute attribute = as.getAnnotation(restrictions.getProperty());
+            if (attribute != null) {
+                if (attribute.tipo().equals(Attribute.TIPO.ELEMENT)) {
+                    query.append("/");
+                    query.append(restrictions.getProperty());
+                    query.append("[text()<");
+                    query.append(restrictions.getValue());
+                    query.append("]/parent::node()");
+                    return;
+                } else {
+                    query.append("[@");
+                    query.append(restrictions.getProperty());
+                    query.append("<");
+                    query.append(restrictions.getValue());
+                    query.append("]");
+                }
+            }
+        }
+
     }
 
     protected void addLike(Restrictions restrictions) {
-        query.append("[contains(@");
-        query.append(restrictions.getProperty());
-        query.append(",'");
-        query.append(restrictions.getValue());
-        query.append("')]");
+        if (as.isAnnotatedWithAttribute(restrictions.getProperty())) {
+            Attribute attribute = as.getAnnotation(restrictions.getProperty());
+            if (attribute != null) {
+                if (attribute.tipo().equals(Attribute.TIPO.ELEMENT)) {
+                    query.append("/");
+                    query.append(restrictions.getProperty());
+                    query.append("[contains(text(),'");
+                    query.append(restrictions.getValue());
+                    query.append("')]/parent::node()");
+                    return;
+                } else {
+                    query.append("[contains(@");
+                    query.append(restrictions.getProperty());
+                    query.append(",'");
+                    query.append(restrictions.getValue());
+                    query.append("')]");
+                }
+            }
+        }
     }
 
     public Class<? extends Object> getClasse() {

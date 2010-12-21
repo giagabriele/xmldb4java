@@ -112,6 +112,24 @@ public class AnnotationScanner {
         return null;
     }
 
+    public boolean isAnnotatedWithAttribute(String property){
+        for(Field field:getAttributes()){
+            if(field.getName().equalsIgnoreCase(property)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Attribute getAnnotation(String property){
+        for(Field field:getAttributes()){
+            if(field.getName().equalsIgnoreCase(property)){
+                return getAnnotationAttribute(field);
+            }
+        }
+        return null;
+    }
+
     public ManyToOne getAnnotationManyToOne(Field field) {
         for (PairAnnotationField pair : attributesManyToOne) {
             if (pair.getField().equals(field)) {
