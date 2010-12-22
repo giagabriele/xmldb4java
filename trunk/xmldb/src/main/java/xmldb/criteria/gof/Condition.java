@@ -16,38 +16,37 @@
  */
 package xmldb.criteria.gof;
 
-import xmldb.configuration.AnnotationScanner;
-import xmldb.util.AnnotationHelper;
+import java.util.ArrayList;
+import xmldb.criteria.gof.function.And;
 
 /**
  *
  * @author Giacomo Stefano Gabriele
  */
-public class XPathQuery implements XPathSintax{
+public class Condition implements XPathSintax{
 
-    protected static final String SELECT_ALL = "//";
-
-    protected Class classe;
-    protected Condition condition;
-
-    public XPathQuery(Class classe) {
-        this.classe = classe;
-        this.condition = new Condition();
-    }
+    private ArrayList<XPathSintax> conditions = new ArrayList<XPathSintax>();
 
     public String getXPath() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(SELECT_ALL);
-        AnnotationScanner as = AnnotationHelper.get().get(classe);
-        sb.append(as.getNameEntity());
 
-        sb.append(condition.getXPath());
-        
+        if(conditions.isEmpty()){
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for(XPathSintax c:conditions){
+            sb.append(c.getXPath());
+        }
+        sb.append("]");
         return sb.toString();
     }
 
     public boolean add(XPathSintax e) {
-        return condition.add(e);
+        if(!conditions.isEmpty()){
+            conditions.add(new And());
+        }
+        return conditions.add(e);
     }
 
     

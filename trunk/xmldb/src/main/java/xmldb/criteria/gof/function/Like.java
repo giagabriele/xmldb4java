@@ -14,15 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria.gof;
+package xmldb.criteria.gof.function;
 
 /**
  *
- * @author GGabriele
+ * @author Giacomo Stefano Gabriele
  */
-public abstract class Function extends XPathQuery{
+public class Like extends Function{
 
-    public Function(Class classe) {
-        super(classe);
+    protected static final String LIKE = "contains(<property>,'<value>')";
+    
+    public Like(Class classe, String property, Object value) {
+        this.classe = classe;
+        this.property = property;
+        this.value = value;
+    }
+
+    @Override
+    protected String getFunction() {
+        return LIKE;
     }
 }

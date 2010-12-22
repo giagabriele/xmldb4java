@@ -41,29 +41,30 @@ public class Restrictions {
         this.r2 = r2;
     }
 
-    String getProperty() {
+    public String getProperty() {
         return property;
     }
 
-    String getValue() {
+    public String getValue() {
         return value;
     }
 
-    Operation getOperation() {
+    public Operation getOperation() {
         return operation;
     }
 
-    Restrictions getR1() {
+    public Restrictions getR1() {
         return r1;
     }
 
-    Restrictions getR2() {
+    public Restrictions getR2() {
         return r2;
     }
 
-//	public static Restrictions AND(Restrictions r1,Restrictions r2) {
-//		return new Restrictions(r1,r2, Operation.AND);
-//	}
+    public static Restrictions AND(Restrictions r1, Restrictions r2) {
+        return new Restrictions(r1, r2, Operation.AND);
+    }
+
     public static Restrictions idEq(Object value) {
         return new Restrictions(null, String.valueOf(value), Operation.ID_EQ);
     }

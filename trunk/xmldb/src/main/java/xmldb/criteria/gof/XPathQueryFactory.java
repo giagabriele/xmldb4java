@@ -16,27 +16,70 @@
  */
 package xmldb.criteria.gof;
 
+import xmldb.configuration.AnnotationScanner;
+import xmldb.criteria.Restrictions;
+import xmldb.criteria.gof.function.And;
+import xmldb.criteria.gof.operator.Gt;
+import xmldb.criteria.gof.operator.Eq;
+import xmldb.criteria.gof.function.Like;
+import xmldb.criteria.gof.function.OR;
+import xmldb.criteria.gof.operator.Lt;
+import xmldb.util.AnnotationHelper;
+
 /**
  *
  * @author Giacomo Stefano Gabriele
  */
 public class XPathQueryFactory {
 
-    public static XPathQuery createLike(Class clazz,String property,Object value){
-        return new Like(clazz, property, value);
-    }
-    
-    public static XPathQuery createEq(Class clazz,String property,Object value){
-        return new Eq(clazz, property, value);
+    public static XPathSintax createLike(Class clazz, String property, Object value) {
+       return new Like(clazz, property, value);
     }
 
-    public static XPathQuery createGt(Class clazz,String property,Object value){
+    public static XPathSintax createEq(Class clazz, String property, Object value) {
+       return new Eq(clazz, property, value);
+    }
+
+    public static XPathSintax createGt(Class clazz, String property, Object value) {
         return new Gt(clazz, property, value);
     }
 
-    public static XPathQuery createAnd(Class clazz,XPathQuery q1,XPathQuery q2){
-        return new And(clazz, q1, q2);
+    public static XPathSintax createLt(Class clazz, String property, Object value) {
+        return new Lt(clazz, property, value);
     }
 
+    public static XPathSintax createAnd(XPathSintax q1, XPathSintax q2) {
+        return new And(q1,q2);
+    }
 
+    public static XPathSintax createOR(XPathSintax q1, XPathSintax q2) {
+        return new OR(q1,q2);
+    }
+
+    public static XPathSintax trasform(Class classe, Restrictions restrictions) {
+        switch (restrictions.getOperation()) {
+            case EQ:
+                return createEq(classe, restrictions.getProperty(), restrictions.getValue());
+            case AND:
+                XPathSintax s1 = trasform(classe, restrictions.getR1());
+                XPathSintax s2 = trasform(classe, restrictions.getR2());
+                return createAnd(s1, s2);
+            case OR:
+                XPathSintax ss1 = trasform(classe, restrictions.getR1());
+                XPathSintax ss2 = trasform(classe, restrictions.getR2());
+                return createOR(ss1, ss2);
+            case LIKE:
+                return createLike(classe, restrictions.getProperty(), restrictions.getValue());
+            case GT:
+                return createGt(classe, restrictions.getProperty(), restrictions.getValue());
+            case LT:
+                return createLt(classe, restrictions.getProperty(), restrictions.getValue());
+            case ID_EQ:
+                AnnotationScanner as = AnnotationHelper.get().get(classe);
+                return createEq(classe, as.getId().getName(), restrictions.getValue());
+            default:
+                break;
+        }
+        return null;
+    }
 }

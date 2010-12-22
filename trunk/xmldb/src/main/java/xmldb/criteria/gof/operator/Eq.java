@@ -14,41 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria.gof;
+package xmldb.criteria.gof.operator;
 
-import xmldb.configuration.AnnotationScanner;
-import xmldb.util.AnnotationHelper;
 
 /**
  *
- * @author Giacomo Stefano Gabriele
+ * @author GGabriele
  */
-public class XPathQuery implements XPathSintax{
-
-    protected static final String SELECT_ALL = "//";
-
-    protected Class classe;
-    protected Condition condition;
-
-    public XPathQuery(Class classe) {
-        this.classe = classe;
-        this.condition = new Condition();
-    }
-
-    public String getXPath() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(SELECT_ALL);
-        AnnotationScanner as = AnnotationHelper.get().get(classe);
-        sb.append(as.getNameEntity());
-
-        sb.append(condition.getXPath());
-        
-        return sb.toString();
-    }
-
-    public boolean add(XPathSintax e) {
-        return condition.add(e);
-    }
-
+public class Eq extends Operator {
     
+    public Eq(Class classe, String property, Object value) {
+        super(classe, property, value);
+    }
+
+    @Override
+    protected String getOperator() {
+        return "=";
+    }
+
+
 }

@@ -14,55 +14,65 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria.gof;
+package xmldb.criteria.gof.operator;
 
 import xmldb.annotation.Attribute;
 import xmldb.configuration.AnnotationScanner;
+import xmldb.criteria.gof.XPathSintax;
 import xmldb.util.AnnotationHelper;
 
 /**
  *
- * @author Giacomo Stefano Gabriele
+ * @author GGabriele
  */
-public class Like extends Function{
+public abstract class Operator implements  XPathSintax{
 
-    protected static final String LIKE = "<child>[contains(<attribute><property>,'<value>')]<parent>";
-    protected static final String CHILD = "<child>";
-    protected static final String ATTRIBUTE = "<attribute>";
+    protected static final String OPERATION = "<property><operator><value>";
+
     protected static final String PROPERTY = "<property>";
     protected static final String VALUE = "<value>";
-    protected static final String PARENT = "<parent>";
+    protected static final String OPERATOR = "<operator>";
 
     protected String property;
     protected Object value;
+    protected AnnotationScanner as;
+    protected StringBuilder query;
 
-    public Like(Class classe, String property, Object value) {
-        super(classe);
+    public Operator(Class classe, String property, Object value) {
+        as = AnnotationHelper.get().get(classe);
         this.property = property;
         this.value = value;
+        this.query = new StringBuilder();
     }
 
-    @Override
-    public String getQuery() {
-        AnnotationScanner as = AnnotationHelper.get().get(classe);
-        String query = LIKE;
+     @Override
+    public String getXPath() {
+        String sintax = OPERATION;
+
         if (as.isAnnotatedWithAttribute(property)) {
             Attribute attribute = as.getAnnotation(property);
             if (attribute != null) {
                 if (attribute.tipo().equals(Attribute.TIPO.ELEMENT)) {
-                    query = query.replace(CHILD, "/"+property);
-                    query = query.replace(ATTRIBUTE, "");
-                    query = query.replace(PROPERTY, "text()");
-                    query = query.replace(PARENT, "/parent::node()");
+                    sintax = sintax.replace(PROPERTY, "child::"+property.toLowerCase());
                 } else {
-                    query = query.replace(CHILD, "");
-                    query = query.replace(ATTRIBUTE, "@");
-                    query = query.replace(PROPERTY, property);
-                    query = query.replace(PARENT, "");
+                    sintax = sintax.replace(PROPERTY, "@"+property.toLowerCase());
+                }
+                if(value instanceof String){
+                    sintax = sintax.replace(VALUE, "'"+String.valueOf(value)+"'");
+                }else{
+                    sintax = sintax.replace(VALUE, String.valueOf(value));
                 }
             }
-            query = query.replace(VALUE, String.valueOf(value));
+        }else{
+            //Is Id type == attribute
+            sintax = sintax.replace(PROPERTY, "@"+property.toLowerCase());
+            sintax = sintax.replace(VALUE, String.valueOf(value));
         }
-        return query;
+
+        sintax = sintax.replace(OPERATOR, getOperator());
+
+        return sintax.toString();
     }
+
+     protected abstract String getOperator();
 }
