@@ -14,26 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria.gof;
-
-import xmldb.configuration.AnnotationScanner;
-import xmldb.util.AnnotationHelper;
+package xmldb.criteria.gof.function;
 
 /**
  *
- * @author GGabriele
+ * @author Giacomo Stefano Gabriele
  */
-public abstract class Operator extends XPathQuery{
-    protected String property;
-    protected Object value;
-    protected AnnotationScanner as;
-    protected StringBuilder query;
+public class StartWith extends Function{
+    protected static final String START_WITH = "start-with(<property>,'<value>')";
 
-    public Operator(Class classe, String property, Object value) {
-        super(classe);
-        as = AnnotationHelper.get().get(classe);
-        this.property = property;
-        this.value = value;
-        this.query = new StringBuilder();
+    @Override
+    protected String getFunction() {
+        return START_WITH;
     }
+
 }

@@ -25,8 +25,8 @@ public class CriteriaTest extends XmlDBUnitTest{
         Criteria expResult = null;
         Criteria result = Criteria.createCriteria(classe);
         result.add(Restrictions.like("Nome", "ciao"));
-        result.add(Restrictions.lt("at_2", 5));
-        result.add(Restrictions.gt("at_3", 3));
+        result.add(Restrictions.OR(Restrictions.gt("anni", 3), Restrictions.lt("anni", 5)));
+        //result.add(Restrictions.gt("id", 3));
         try{
             validate(result);
         }catch(XPathExpressionException e){

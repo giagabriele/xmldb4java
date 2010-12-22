@@ -20,23 +20,7 @@ package xmldb.criteria.gof;
  *
  * @author GGabriele
  */
-public class And extends Function{
+public interface XPathSintax {
 
-    protected XPathQuery query1;
-    protected XPathQuery query2;
-
-    public And(Class classe, XPathQuery query1, XPathQuery query2) {
-        super(classe);
-        this.query1 = query1;
-        this.query2 = query2;
-    }
-
-    @Override
-    public String getQuery() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(query1.getQuery());
-        sb.append(" and ");
-        sb.append(query2.getQuery());
-        return sb.toString();
-    }
+    public String getXPath();
 }

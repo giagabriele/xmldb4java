@@ -121,6 +121,10 @@ public class AnnotationScanner {
         return false;
     }
 
+    public boolean isAnnotatedWithID(String property){
+        return id.getField().getName().equalsIgnoreCase(property);
+    }
+
     public Attribute getAnnotation(String property){
         for(Field field:getAttributes()){
             if(field.getName().equalsIgnoreCase(property)){

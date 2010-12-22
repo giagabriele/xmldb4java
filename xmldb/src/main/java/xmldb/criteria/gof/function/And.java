@@ -14,41 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria.gof;
+package xmldb.criteria.gof.function;
 
-import xmldb.configuration.AnnotationScanner;
-import xmldb.util.AnnotationHelper;
+import xmldb.criteria.gof.XPathSintax;
 
 /**
  *
- * @author Giacomo Stefano Gabriele
+ * @author GGabriele
  */
-public class XPathQuery implements XPathSintax{
+public class And extends Function{
 
-    protected static final String SELECT_ALL = "//";
+    protected XPathSintax q1;
+    protected XPathSintax q2;
 
-    protected Class classe;
-    protected Condition condition;
-
-    public XPathQuery(Class classe) {
-        this.classe = classe;
-        this.condition = new Condition();
+    public And(XPathSintax q1, XPathSintax q2) {
+        this.q1 = q1;
+        this.q2 = q2;
     }
 
-    public String getXPath() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(SELECT_ALL);
-        AnnotationScanner as = AnnotationHelper.get().get(classe);
-        sb.append(as.getNameEntity());
-
-        sb.append(condition.getXPath());
-        
-        return sb.toString();
-    }
-
-    public boolean add(XPathSintax e) {
-        return condition.add(e);
+    public And() {
     }
 
     
+
+    @Override
+    public String getXPath() {
+        if(q1==null || q2==null){
+            return " and ";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("(").append(q1.getXPath()).append(" and ").append(q2.getXPath()).append(")");
+        return sb.toString();
+    }
+
+    @Override
+    protected String getFunction() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

@@ -14,41 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria.gof;
-
-import xmldb.annotation.Attribute;
-
+package xmldb.criteria.gof.operator;
 /**
  *
  * @author Giacomo Stefano Gabriele
  */
 public class Lt extends Operator{
 
+   
     public Lt(Class classe, String property, Object value) {
         super(classe, property, value);
     }
 
     @Override
-    public String getQuery() {
-         if (as.isAnnotatedWithAttribute(property)) {
-            Attribute attribute = as.getAnnotation(property);
-            if (attribute != null) {
-                if (attribute.tipo().equals(Attribute.TIPO.ELEMENT)) {
-                    query.append("/");
-                    query.append(property);
-                    query.append("[text()<");
-                    query.append(value);
-                    query.append("]/parent::node()");
-                } else {
-                    query.append("[@");
-                    query.append(property);
-                    query.append("<");
-                    query.append(value);
-                    query.append("]");
-                }
-            }
-        }
-         return query.toString();
+    protected String getOperator() {
+       return "<";
     }
-
 }

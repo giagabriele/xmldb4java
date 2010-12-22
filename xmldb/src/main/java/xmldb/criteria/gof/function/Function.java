@@ -14,51 +14,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria.gof;
+package xmldb.criteria.gof.function;
 
 import xmldb.annotation.Attribute;
 import xmldb.configuration.AnnotationScanner;
+import xmldb.criteria.gof.XPathSintax;
 import xmldb.util.AnnotationHelper;
 
 /**
  *
  * @author GGabriele
  */
-public class Eq extends Operator {
-    
-    protected static final String EQ = "<child>[<attribute><property>='<value>']/<parent>";
-    protected static final String CHILD = "<child>";
-    protected static final String ATTRIBUTE = "<attribute>";
+public abstract class Function implements XPathSintax{
+
     protected static final String PROPERTY = "<property>";
     protected static final String VALUE = "<value>";
-    protected static final String PARENT = "<parent>";
 
-    public Eq(Class classe, String property, Object value) {
-        super(classe, property, value);
+    protected Class classe;
+    protected String property;
+    protected Object value;
+
+    
+
+    public Function(Class classe, String property, Object value) {
+        this.classe = classe;
+        this.property = property;
+        this.value = value;
     }
 
-    @Override
-    public String getQuery() {
-        String query = EQ;
-        AnnotationScanner as = AnnotationHelper.get().get(classe);
+    public Function() {
+        //Solo funzioni AND OR Not
+    }
 
+
+    public String getXPath() {
+        String query = getFunction();
+        AnnotationScanner as = AnnotationHelper.get().get(classe);
         if (as.isAnnotatedWithAttribute(property)) {
             Attribute attribute = as.getAnnotation(property);
             if (attribute != null) {
                 if (attribute.tipo().equals(Attribute.TIPO.ELEMENT)) {
-                    query = query.replace(CHILD, "/"+property);
-                    query = query.replace(ATTRIBUTE, "");
-                    query = query.replace(PROPERTY, "text()");
-                    query = query.replace(PARENT, "/parent::node()");
+                    query = query.replace(PROPERTY, "child::"+property.toLowerCase());
                 } else {
-                    query = query.replace(CHILD, "");
-                    query = query.replace(ATTRIBUTE, "@");
-                    query = query.replace(PROPERTY, property);
-                    query = query.replace(PARENT, "");
+                    query = query.replace(PROPERTY, "@"+property.toLowerCase());
                 }
-                query = query.replace(VALUE, String.valueOf(value));
             }
+            query = query.replace(VALUE, String.valueOf(value));
         }
-        return query.toString();
+        return query;
     }
+
+    protected abstract String getFunction();
 }

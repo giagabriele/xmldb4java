@@ -21,11 +21,11 @@ public class XPathQueryTest extends XmlDBUnitTest{
         System.out.println("like");
         Class classe = Persona.class;
         
-        XPathQuery query = XPathQueryFactory.createLike(classe, "nome", "Nome");
-        XPathQuery query1 = XPathQueryFactory.createLike(classe, "cognome", "Nome");
-
-        XPathQuery result = XPathQueryFactory.createAnd(classe, query, query1);
-        System.out.println("Query Like: "+result.getQuery());
+//        XPathQuery query = XPathQueryFactory.createLike(classe, "nome", "Nome");
+//        XPathQuery query1 = XPathQueryFactory.createLike(classe, "cognome", "Nome");
+//
+//        XPathQuery result = XPathQueryFactory.createAnd(classe, query, query1);
+//        System.out.println("Query Like: "+result.getQuery());
         
     }
 }

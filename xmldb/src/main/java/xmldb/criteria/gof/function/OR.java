@@ -14,41 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria.gof;
+package xmldb.criteria.gof.function;
 
-import xmldb.configuration.AnnotationScanner;
-import xmldb.util.AnnotationHelper;
+import xmldb.criteria.gof.XPathSintax;
 
 /**
  *
- * @author Giacomo Stefano Gabriele
+ * @author GGabriele
  */
-public class XPathQuery implements XPathSintax{
+public class OR extends Function {
 
-    protected static final String SELECT_ALL = "//";
+    protected XPathSintax q1;
+    protected XPathSintax q2;
 
-    protected Class classe;
-    protected Condition condition;
-
-    public XPathQuery(Class classe) {
-        this.classe = classe;
-        this.condition = new Condition();
+    public OR(XPathSintax q1, XPathSintax q2) {
+        this.q1 = q1;
+        this.q2 = q2;
     }
 
+    @Override
     public String getXPath() {
         StringBuilder sb = new StringBuilder();
-        sb.append(SELECT_ALL);
-        AnnotationScanner as = AnnotationHelper.get().get(classe);
-        sb.append(as.getNameEntity());
-
-        sb.append(condition.getXPath());
-        
+        sb.append("(").append(q1.getXPath()).append(" or ").append(q2.getXPath()).append(")");
         return sb.toString();
     }
 
-    public boolean add(XPathSintax e) {
-        return condition.add(e);
+    @Override
+    protected String getFunction() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    
 }

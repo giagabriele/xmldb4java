@@ -21,7 +21,6 @@ package xmldb.criteria;
  * @author Giacomo Stefano Gabriele
  *
  */
-enum Operation {
-
+public enum Operation {
     EQ, OR, AND, LIKE, GT, LT, ID_EQ
 }
