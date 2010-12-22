@@ -22,5 +22,5 @@ package xmldb.criteria;
  *
  */
 public enum Operation {
-    EQ, OR, AND, LIKE, GT, LT, ID_EQ
+    EQ, OR, AND, LIKE, GT, LT, ID_EQ,START_WITH
 }
