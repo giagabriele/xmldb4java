@@ -88,4 +88,8 @@ public class Restrictions {
     public static Restrictions OR(Restrictions r1, Restrictions r2) {
         return new Restrictions(r1, r2, Operation.OR);
     }
+
+    public static Restrictions startWith(String property,Object value) {
+        return new Restrictions(property, String.valueOf(value), Operation.START_WITH);
+    }
 }

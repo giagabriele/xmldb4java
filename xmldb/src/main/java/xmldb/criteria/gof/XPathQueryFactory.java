@@ -23,6 +23,7 @@ import xmldb.criteria.gof.operator.Gt;
 import xmldb.criteria.gof.operator.Eq;
 import xmldb.criteria.gof.function.Like;
 import xmldb.criteria.gof.function.OR;
+import xmldb.criteria.gof.function.StartWith;
 import xmldb.criteria.gof.operator.Lt;
 import xmldb.util.AnnotationHelper;
 
@@ -46,6 +47,10 @@ public class XPathQueryFactory {
 
     public static XPathSintax createLt(Class clazz, String property, Object value) {
         return new Lt(clazz, property, value);
+    }
+
+    public static XPathSintax createStartWith(Class clazz, String property, Object value) {
+        return new StartWith(clazz,property,value);
     }
 
     public static XPathSintax createAnd(XPathSintax q1, XPathSintax q2) {
@@ -77,6 +82,8 @@ public class XPathQueryFactory {
             case ID_EQ:
                 AnnotationScanner as = AnnotationHelper.get().get(classe);
                 return createEq(classe, as.getId().getName(), restrictions.getValue());
+            case START_WITH:
+                return createStartWith(classe, restrictions.getProperty(), restrictions.getValue());
             default:
                 break;
         }

@@ -22,11 +22,14 @@ public class CriteriaTest extends XmlDBUnitTest{
     public void testCreateCriteria() {
         System.out.println("createCriteria");
         Class<? extends Object> classe = Persona.class;
-        Criteria expResult = null;
         Criteria result = Criteria.createCriteria(classe);
-        result.add(Restrictions.like("Nome", "ciao"));
+        //result.add(Restrictions.like("Nome", "ciao"));
         result.add(Restrictions.OR(Restrictions.gt("anni", 3), Restrictions.lt("anni", 5)));
-        //result.add(Restrictions.gt("id", 3));
+        Restrictions restrictions = Restrictions.OR(
+                Restrictions.startWith("nome", "Nome"),
+                Restrictions.AND(Restrictions.like("nome", "Cognome1"), Restrictions.like("nome", "Cognome2")));
+
+        result.add(restrictions);
         try{
             validate(result);
         }catch(XPathExpressionException e){

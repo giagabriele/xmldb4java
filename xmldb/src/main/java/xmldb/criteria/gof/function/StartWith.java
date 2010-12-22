@@ -21,7 +21,11 @@ package xmldb.criteria.gof.function;
  * @author Giacomo Stefano Gabriele
  */
 public class StartWith extends Function{
-    protected static final String START_WITH = "start-with(<property>,'<value>')";
+    protected static final String START_WITH = "starts-with(<property>,'<value>')";
+
+    public StartWith(Class classe, String property, Object value) {
+        super(classe, property, value);
+    }
 
     @Override
     protected String getFunction() {
