@@ -61,17 +61,17 @@ public class XPathQueryFactory {
         return new OR(q1,q2);
     }
 
-    public static XPathSintax trasform(Class classe, Restrictions restrictions) {
+    public static XPathSintax create(Class classe, Restrictions restrictions) {
         switch (restrictions.getOperation()) {
             case EQ:
                 return createEq(classe, restrictions.getProperty(), restrictions.getValue());
             case AND:
-                XPathSintax s1 = trasform(classe, restrictions.getR1());
-                XPathSintax s2 = trasform(classe, restrictions.getR2());
+                XPathSintax s1 = create(classe, restrictions.getR1());
+                XPathSintax s2 = create(classe, restrictions.getR2());
                 return createAnd(s1, s2);
             case OR:
-                XPathSintax ss1 = trasform(classe, restrictions.getR1());
-                XPathSintax ss2 = trasform(classe, restrictions.getR2());
+                XPathSintax ss1 = create(classe, restrictions.getR1());
+                XPathSintax ss2 = create(classe, restrictions.getR2());
                 return createOR(ss1, ss2);
             case LIKE:
                 return createLike(classe, restrictions.getProperty(), restrictions.getValue());

@@ -21,6 +21,7 @@ import xmldb.configuration.AnnotationScanner;
 import xmldb.criteria.gof.XPathQuery;
 import xmldb.criteria.gof.XPathQueryFactory;
 import xmldb.criteria.gof.XPathSintax;
+import xmldb.criteria.projections.Projection;
 import xmldb.util.AnnotationHelper;
 
 /**
@@ -32,8 +33,6 @@ public class Criteria {
 
     protected static final Logger logger = Logger.getLogger(Criteria.class);
     private Class<? extends Object> classe;
-
-    protected Projection projection;
     protected AnnotationScanner as = null;
 
     protected XPathQuery queryXPath;
@@ -48,7 +47,7 @@ public class Criteria {
     }
 
     public Criteria add(Restrictions restrictions) {
-        XPathSintax s = XPathQueryFactory.trasform(classe, restrictions);
+        XPathSintax s = XPathQueryFactory.create(classe, restrictions);
         queryXPath.add(s);
         return this;
     }
@@ -57,12 +56,8 @@ public class Criteria {
         return classe;
     }
 
-    public Projection getProjection() {
-        return projection;
-    }
-
     public void setProjection(Projection projection) {
-        this.projection = projection;
+        queryXPath.setProjection(projection);
     }
 
     /**
@@ -71,14 +66,14 @@ public class Criteria {
      */
     public String getXPathQuery() {
         String query = queryXPath.getXPath();
-        if (projection != null) {
-            switch (projection.getType()) {
-                case ROW_COUNT:
-                    return "count(" + query+ ")";
-            }
-        }
         return query;
     }
+
+    public XPathQuery getQueryXPath() {
+        return queryXPath;
+    }
+
+    
 
     @Override
     public String toString() {

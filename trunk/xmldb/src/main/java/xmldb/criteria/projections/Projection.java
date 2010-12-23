@@ -14,34 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria;
+package xmldb.criteria.projections;
+
+import xmldb.criteria.gof.XPathSintax;
 
 /**
  * 
  * @author Giacomo Stefano Gabriele
  *
  */
-public class Projection {
+public abstract class Projection implements XPathSintax {
 
-    public enum TYPE {
+    protected String query;
 
-        ROW_COUNT
-    }
-    protected TYPE type;
-
-    private Projection(TYPE type) {
-        this.type = type;
+    public String getQuery() {
+        return query;
     }
 
-    public static Projection rowCount() {
-        return new Projection(TYPE.ROW_COUNT);
+    public void setQuery(String query) {
+        this.query = query;
     }
 
-    public TYPE getType() {
-        return type;
-    }
-
-    public void setType(TYPE type) {
-        this.type = type;
+    public static Projection rowCount(){
+        return new RowCount();
     }
 }
