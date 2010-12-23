@@ -6,6 +6,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.junit.Test;
 import xmldb.XmlDBUnitTest;
+import xmldb.criteria.projections.Projection;
 import xmldb.model.person.Persona;
 import static org.junit.Assert.*;
 
@@ -35,7 +36,14 @@ public class CriteriaTest extends XmlDBUnitTest{
         }catch(XPathExpressionException e){
             fail(e.getMessage());
         }
-        assertTrue(true);
+
+        result.setProjection(Projection.rowCount());
+
+         try{
+            validate(result);
+        }catch(XPathExpressionException e){
+            fail(e.getMessage());
+        }
     }
 
     protected void validate(Criteria criteria) throws XPathExpressionException{

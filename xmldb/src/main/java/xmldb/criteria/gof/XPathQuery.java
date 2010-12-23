@@ -17,6 +17,7 @@
 package xmldb.criteria.gof;
 
 import xmldb.configuration.AnnotationScanner;
+import xmldb.criteria.projections.Projection;
 import xmldb.util.AnnotationHelper;
 
 /**
@@ -29,6 +30,7 @@ public class XPathQuery implements XPathSintax{
 
     protected Class classe;
     protected Condition condition;
+    protected Projection projection;
 
     public XPathQuery(Class classe) {
         this.classe = classe;
@@ -42,13 +44,26 @@ public class XPathQuery implements XPathSintax{
         sb.append(as.getNameEntity());
 
         sb.append(condition.getXPath());
+
+        String query = sb.toString();
+        //projection
+        if(projection!=null){
+            projection.setQuery(query);
+            query = projection.getQuery();
+        }
         
-        return sb.toString();
+        return query;
     }
 
     public boolean add(XPathSintax e) {
         return condition.add(e);
     }
 
-    
+    public Projection getProjection() {
+        return projection;
+    }
+
+    public void setProjection(Projection projection) {
+        this.projection = projection;
+    }
 }
