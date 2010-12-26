@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
  *
  * @author GGabriele
  */
-public class CriteriaTest extends XmlDBUnitTest{
+public class CriteriaTest extends XmlDBUnitTest {
 
     /**
      * Test of createCriteria method, of class Criteria.
@@ -31,26 +31,33 @@ public class CriteriaTest extends XmlDBUnitTest{
                 Restrictions.AND(Restrictions.like("nome", "Cognome1"), Restrictions.like("nome", "Cognome2")));
 
         result.add(restrictions);
-        try{
+        try {
             validate(result);
-        }catch(XPathExpressionException e){
+        } catch (XPathExpressionException e) {
             fail(e.getMessage());
         }
 
         result.setProjection(Projection.rowCount());
 
-         try{
+        try {
             validate(result);
-        }catch(XPathExpressionException e){
+        } catch (XPathExpressionException e) {
+            fail(e.getMessage());
+        }
+
+        result.setProjection(Projection.projectionList("nome"));
+
+        try {
+            validate(result);
+        } catch (XPathExpressionException e) {
             fail(e.getMessage());
         }
     }
 
-    protected void validate(Criteria criteria) throws XPathExpressionException{
-        System.out.println(criteria);
+    protected void validate(Criteria criteria) throws XPathExpressionException {
+        System.out.println(criteria.getXPathQuery());
         XPathFactory factory = XPathFactory.newInstance();
         XPath xpath = factory.newXPath();
         XPathExpression expr = xpath.compile(criteria.getXPathQuery());
     }
-
 }

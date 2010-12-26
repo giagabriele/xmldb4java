@@ -51,12 +51,14 @@ public abstract class Function implements XPathSintax{
         String query = getFunction();
         AnnotationScanner as = AnnotationHelper.get().get(classe);
         if (as.isAnnotatedWithAttribute(property)) {
+            String nameProperty = as.getField(property).getName();
+
             Attribute attribute = as.getAnnotation(property);
             if (attribute != null) {
                 if (attribute.tipo().equals(Attribute.TIPO.ELEMENT)) {
-                    query = query.replace(PROPERTY, "child::"+property.toLowerCase());
+                    query = query.replace(PROPERTY, "child::"+nameProperty);
                 } else {
-                    query = query.replace(PROPERTY, "@"+property.toLowerCase());
+                    query = query.replace(PROPERTY, "@"+nameProperty);
                 }
             }
             query = query.replace(VALUE, String.valueOf(value));

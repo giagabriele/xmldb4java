@@ -27,6 +27,7 @@ import xmldb.annotation.ID;
 import xmldb.annotation.ManyToOne;
 import xmldb.annotation.OneToMany;
 import xmldb.exception.AnnotationRequiredException;
+import xmldb.exception.XmlDBException;
 
 /**
  *
@@ -132,6 +133,15 @@ public class AnnotationScanner {
             }
         }
         return null;
+    }
+
+    public Field getField(String property){
+        for(Field field:getAttributes()){
+            if(field.getName().equalsIgnoreCase(property)){
+                return field;
+            }
+        }
+        throw new XmlDBException("Il campo ["+property+"] non esiste");
     }
 
     public ManyToOne getAnnotationManyToOne(Field field) {
@@ -273,8 +283,8 @@ public class AnnotationScanner {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Classe\t").append(classe);
-        sb.append("\nNome Entity\t").append(nameEntity);
+        sb.append("Classe:").append(classe);
+        sb.append("\nNome Entity:").append(nameEntity);
         sb.append("\n\tID:").append(id);
         for (PairAnnotationField pair : attributes) {
             sb.append("\n\tAttribute:").append(pair);

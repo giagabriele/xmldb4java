@@ -68,7 +68,7 @@ public abstract class AbstractSession implements SessionLazy {
 
     public void setPathDb(String pathDb) throws DocumentException {
         this.pathDb = pathDb;
-        logger.info("Path xmldb\t" + pathDb);
+        logger.info("Path xmldb: " + pathDb);
         openDocument();
     }
 
@@ -137,8 +137,8 @@ public abstract class AbstractSession implements SessionLazy {
         controllaClasse(classe);
 
         if (logger.isDebugEnabled()) {
-            logger.debug("input Classe\t" + classe);
-            logger.debug("input Id\t" + id);
+            logger.debug("input Classe:" + classe);
+            logger.debug("input Id:" + id);
         }
         Element element = findElement(classe, id);
 
@@ -198,8 +198,8 @@ public abstract class AbstractSession implements SessionLazy {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("input Classe\t" + classe);
-            logger.debug("input Lazy\t" + lazy);
+            logger.debug("input Classe:" + classe);
+            logger.debug("input Lazy:" + lazy);
         }
 
         controllaClasse(classe);
@@ -261,8 +261,8 @@ public abstract class AbstractSession implements SessionLazy {
         String xPath = criteria.getXPathQuery();
 
         if (logger.isDebugEnabled()) {
-            logger.debug("input Criteria\t" + criteria);
-            logger.debug("input Lazy\t" + lazy);
+            logger.debug("input Criteria:" + criteria);
+            logger.debug("input Lazy:" + lazy);
         }
 
         //Intercettori onBefore
@@ -353,9 +353,9 @@ public abstract class AbstractSession implements SessionLazy {
             throw new XmlDBException("La classe [" + classe + "] non e' stata trovata!!!!", e);
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("input classe\t" + classe);
-            logger.debug("input Id\t" + id);
-            logger.debug("input Lazy\t" + lazy);
+            logger.debug("input classe:" + classe);
+            logger.debug("input Id:" + id);
+            logger.debug("input Lazy:" + lazy);
         }
         controllaClasse(classe);
         try {
@@ -414,8 +414,8 @@ public abstract class AbstractSession implements SessionLazy {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("input classe\t" + classe);
-            logger.debug("input Lazy\t" + lazy);
+            logger.debug("input classe:" + classe);
+            logger.debug("input Lazy:" + lazy);
         }
 
         controllaClasse(o.getClass());
