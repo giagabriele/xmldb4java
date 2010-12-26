@@ -167,13 +167,13 @@ public class Configuration {
         try {
             ResourceBundle resourceBundle = ResourceBundle.getBundle("dbxml");
             Enumeration<String> keys = resourceBundle.getKeys();
-            StringBuilder sb = new StringBuilder();
+//            StringBuilder sb = new StringBuilder();
             logger.info("Configuration properties......................................................................");
             while (keys.hasMoreElements()) {
                 String key = keys.nextElement();
                 String value = resourceBundle.getString(key);
-                sb.append("[").append(key).append("]").append("->[").append(value).append("]\n");
-                logger.info("["+key+"]\t->["+value+"]");
+//                sb.append("[").append(key).append("]").append("->[").append(value).append("]\n");
+                logger.info("["+key+"]-->["+value+"]");
                 setProperty(key, value);
             }
 

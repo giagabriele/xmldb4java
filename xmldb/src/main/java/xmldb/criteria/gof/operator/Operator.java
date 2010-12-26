@@ -51,11 +51,12 @@ public abstract class Operator implements  XPathSintax{
 
         if (as.isAnnotatedWithAttribute(property)) {
             Attribute attribute = as.getAnnotation(property);
+            String nameProperty = as.getField(property).getName();
             if (attribute != null) {
                 if (attribute.tipo().equals(Attribute.TIPO.ELEMENT)) {
-                    sintax = sintax.replace(PROPERTY, "child::"+property.toLowerCase());
+                    sintax = sintax.replace(PROPERTY, "child::"+nameProperty);
                 } else {
-                    sintax = sintax.replace(PROPERTY, "@"+property.toLowerCase());
+                    sintax = sintax.replace(PROPERTY, "@"+nameProperty);
                 }
                 if(value instanceof String){
                     sintax = sintax.replace(VALUE, "'"+String.valueOf(value)+"'");
@@ -65,7 +66,7 @@ public abstract class Operator implements  XPathSintax{
             }
         }else{
             //Is Id type == attribute
-            sintax = sintax.replace(PROPERTY, "@"+property.toLowerCase());
+            sintax = sintax.replace(PROPERTY, "@"+as.getId().getName());
             sintax = sintax.replace(VALUE, String.valueOf(value));
         }
 

@@ -34,8 +34,8 @@ public class Criteria {
     protected static final Logger logger = Logger.getLogger(Criteria.class);
     private Class<? extends Object> classe;
     protected AnnotationScanner as = null;
-
     protected XPathQuery queryXPath;
+
     /**
      * Costruttore privato
      * @param classe
@@ -57,7 +57,7 @@ public class Criteria {
     }
 
     public void setProjection(Projection projection) {
-        queryXPath.setProjection(projection);
+        this.queryXPath.setProjection(projection);
     }
 
     /**
@@ -72,8 +72,6 @@ public class Criteria {
     public XPathQuery getQueryXPath() {
         return queryXPath;
     }
-
-    
 
     @Override
     public String toString() {

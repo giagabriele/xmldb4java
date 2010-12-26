@@ -49,7 +49,7 @@ public class XPathQuery implements XPathSintax{
         //projection
         if(projection!=null){
             projection.setQuery(query);
-            query = projection.getQuery();
+            query = projection.getXPath();
         }
         
         return query;
