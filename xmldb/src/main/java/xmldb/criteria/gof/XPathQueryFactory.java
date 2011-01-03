@@ -16,16 +16,16 @@
  */
 package xmldb.criteria.gof;
 
-import xmldb.configuration.AnnotationScanner;
-import xmldb.criteria.Restrictions;
 import xmldb.criteria.gof.function.And;
+import xmldb.criteria.gof.function.Betwheen;
 import xmldb.criteria.gof.operator.Gt;
 import xmldb.criteria.gof.operator.Eq;
 import xmldb.criteria.gof.function.Like;
 import xmldb.criteria.gof.function.OR;
 import xmldb.criteria.gof.function.StartWith;
+import xmldb.criteria.gof.operator.GtEq;
 import xmldb.criteria.gof.operator.Lt;
-import xmldb.util.AnnotationHelper;
+import xmldb.criteria.gof.operator.LtEq;
 
 /**
  *
@@ -45,8 +45,16 @@ public class XPathQueryFactory {
         return new Gt(clazz, property, value);
     }
 
+    public static XPathSintax createGtEq(Class clazz, String property, Object value) {
+        return new GtEq(clazz, property, value);
+    }
+
     public static XPathSintax createLt(Class clazz, String property, Object value) {
         return new Lt(clazz, property, value);
+    }
+
+    public static XPathSintax createLtEq(Class clazz, String property, Object value) {
+        return new LtEq(clazz, property, value);
     }
 
     public static XPathSintax createStartWith(Class clazz, String property, Object value) {
@@ -61,32 +69,7 @@ public class XPathQueryFactory {
         return new OR(q1,q2);
     }
 
-    public static XPathSintax create(Class classe, Restrictions restrictions) {
-        switch (restrictions.getOperation()) {
-            case EQ:
-                return createEq(classe, restrictions.getProperty(), restrictions.getValue());
-            case AND:
-                XPathSintax s1 = create(classe, restrictions.getR1());
-                XPathSintax s2 = create(classe, restrictions.getR2());
-                return createAnd(s1, s2);
-            case OR:
-                XPathSintax ss1 = create(classe, restrictions.getR1());
-                XPathSintax ss2 = create(classe, restrictions.getR2());
-                return createOR(ss1, ss2);
-            case LIKE:
-                return createLike(classe, restrictions.getProperty(), restrictions.getValue());
-            case GT:
-                return createGt(classe, restrictions.getProperty(), restrictions.getValue());
-            case LT:
-                return createLt(classe, restrictions.getProperty(), restrictions.getValue());
-            case ID_EQ:
-                AnnotationScanner as = AnnotationHelper.get().get(classe);
-                return createEq(classe, as.getId().getName(), restrictions.getValue());
-            case START_WITH:
-                return createStartWith(classe, restrictions.getProperty(), restrictions.getValue());
-            default:
-                break;
-        }
-        return null;
+    public static XPathSintax createBetween(Class classe,String property,long start, long end, boolean incudeStart, boolean incudeEnd) {
+       return new Betwheen(classe, property, start, end, incudeStart, incudeEnd);
     }
 }

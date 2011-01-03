@@ -17,12 +17,9 @@
 package xmldb.criteria;
 
 import org.apache.log4j.Logger;
-import xmldb.configuration.AnnotationScanner;
 import xmldb.criteria.gof.XPathQuery;
-import xmldb.criteria.gof.XPathQueryFactory;
 import xmldb.criteria.gof.XPathSintax;
 import xmldb.criteria.projections.Projection;
-import xmldb.util.AnnotationHelper;
 
 /**
  * 
@@ -33,7 +30,7 @@ public class Criteria {
 
     protected static final Logger logger = Logger.getLogger(Criteria.class);
     private Class<? extends Object> classe;
-    protected AnnotationScanner as = null;
+    //protected AnnotationScanner as = null;
     protected XPathQuery queryXPath;
 
     /**
@@ -42,13 +39,16 @@ public class Criteria {
      */
     private Criteria(Class<? extends Object> classe) {
         this.classe = classe;
-        this.as = AnnotationHelper.get().get(classe);
+        //this.as = AnnotationHelper.get().get(classe);
         this.queryXPath = new XPathQuery(classe);
     }
 
     public Criteria add(Restrictions restrictions) {
-        XPathSintax s = XPathQueryFactory.create(classe, restrictions);
-        queryXPath.add(s);
+        if(restrictions!=null){
+            restrictions.classe = classe;
+            XPathSintax s = restrictions.getPathSintax();//XPathQueryFactory.create(classe, restrictions);
+            queryXPath.add(s);
+        }
         return this;
     }
 

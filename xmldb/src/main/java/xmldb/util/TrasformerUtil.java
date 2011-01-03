@@ -131,7 +131,9 @@ public class TrasformerUtil {
                     }
 
                 }
-                logger.info("trasformElement success");
+                if(logger.isDebugEnabled()){
+                    logger.debug("trasformElement success");
+                }
 
                 return element;
             } catch (Exception e) {
@@ -177,7 +179,9 @@ public class TrasformerUtil {
                     }
                     ReflectionUtils.setValue(field, obj, valore);
                 }
-                logger.info("trasformModel success");
+                if(logger.isDebugEnabled()){
+                    logger.debug("trasformModel success");
+                }
                 return obj;
             } catch (Exception e) {
                 throw new XmlDBException(e);

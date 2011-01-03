@@ -25,9 +25,9 @@ public class CriteriaTest extends XmlDBUnitTest {
         Class<? extends Object> classe = Persona.class;
         Criteria result = Criteria.createCriteria(classe);
         //result.add(Restrictions.like("Nome", "ciao"));
-        result.add(Restrictions.OR(Restrictions.gt("anni", 3), Restrictions.lt("anni", 5)));
+        result.add(Restrictions.OR(Restrictions.between("anni", 3,5), Restrictions.lt("anni", 5)));
         Restrictions restrictions = Restrictions.OR(
-                Restrictions.startWith("nome", "Nome"),
+                Restrictions.startWith("nome", "Nomefffffffffff"),
                 Restrictions.AND(Restrictions.like("nome", "Cognome1"), Restrictions.like("nome", "Cognome2")));
 
         result.add(restrictions);

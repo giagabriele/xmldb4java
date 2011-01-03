@@ -14,37 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria.gof.function;
-
-import xmldb.criteria.gof.XPathSintax;
-import xmldb.exception.XmlDBException;
+package xmldb.criteria.gof.operator;
 
 /**
  *
- * @author GGabriele
+ * @author Giacomo Stefano Gabriele
  */
-public class OR extends Function {
+public class LtEq extends Operator{
 
-    protected XPathSintax q1;
-    protected XPathSintax q2;
-
-    public OR(XPathSintax q1, XPathSintax q2) {
-        if(q1==null || q2==null){
-            throw new XmlDBException("OR Function:una delle due sintassi xpath è null");
-        }
-        this.q1 = q1;
-        this.q2 = q2;
+    public LtEq(Class classe, String property, Object value) {
+        super(classe, property, value);
     }
 
     @Override
-    public String getXPath() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("(").append(q1.getXPath()).append(" or ").append(q2.getXPath()).append(")");
-        return sb.toString();
-    }
-
-    @Override
-    protected String getFunction() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    protected String getOperator() {
+        return "<=";
     }
 }
