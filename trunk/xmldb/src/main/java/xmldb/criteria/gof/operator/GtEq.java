@@ -14,13 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xmldb.criteria;
+package xmldb.criteria.gof.operator;
 
 /**
- * 
- * @author Giacomo Stefano Gabriele
  *
+ * @author Giacomo Stefano Gabriele
  */
-public enum Operation {
-    EQ, OR, AND, LIKE, GT, LT, ID_EQ,START_WITH
+public class GtEq extends Operator{
+
+    public GtEq(Class classe, String property, Object value) {
+        super(classe, property, value);
+    }
+
+    @Override
+    protected String getOperator() {
+        return ">=";
+    }
 }

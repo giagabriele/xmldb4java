@@ -214,8 +214,6 @@ public class Configuration {
         } catch (ClassNotFoundException e) {
             throw new XmlDBException(e);
         }
-
-
     }
 
     /**
