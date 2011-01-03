@@ -45,7 +45,7 @@ public class CriteriaTest extends XmlDBUnitTest {
             fail(e.getMessage());
         }
 
-        result.setProjection(Projection.projectionList("nome"));
+        result.setProjection(Projection.projectionList("Nome"));
 
         try {
             validate(result);
