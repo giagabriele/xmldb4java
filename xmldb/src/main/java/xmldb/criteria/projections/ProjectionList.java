@@ -17,6 +17,9 @@
 
 package xmldb.criteria.projections;
 
+import xmldb.configuration.AnnotationScanner;
+import xmldb.util.AnnotationHelper;
+
 /**
  *
  * @author Giacomo Stefano Gabriele
@@ -30,7 +33,8 @@ public class ProjectionList extends Projection{
     }
     
     public String getXPath() {
-        query = query + "/"+property;
+        AnnotationScanner as = AnnotationHelper.get().get(classe);
+        query = query + "/"+as.getField(property).getName();
         return query;
     }
 

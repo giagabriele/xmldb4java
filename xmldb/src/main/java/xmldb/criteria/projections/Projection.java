@@ -26,10 +26,7 @@ import xmldb.criteria.gof.XPathSintax;
 public abstract class Projection implements XPathSintax {
 
     protected String query;
-
-//    public String getQuery() {
-//        return query;
-//    }
+    protected Class classe;
 
     public void setQuery(String query) {
         this.query = query;
@@ -42,4 +39,13 @@ public abstract class Projection implements XPathSintax {
     public static Projection projectionList(String property){
         return new ProjectionList(property);
     }
+
+    public Class getClasse() {
+        return classe;
+    }
+
+    public void setClasse(Class classe) {
+        this.classe = classe;
+    }
+    
 }

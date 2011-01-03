@@ -57,7 +57,10 @@ public class Criteria {
     }
 
     public void setProjection(Projection projection) {
-        this.queryXPath.setProjection(projection);
+        if(projection !=null){
+            projection.setClasse(classe);
+            this.queryXPath.setProjection(projection);
+        }
     }
 
     /**
