@@ -2,8 +2,9 @@
 
 = Criteria =
 
-...
+==Example==
 {{{
+...
 Criteria result = Criteria.createCriteria(classe);
         result.add(Restrictions.OR(Restrictions.between("anni", 3,5), Restrictions.lt("anni", 5)));
         Restrictions restrictions = Restrictions.OR(
@@ -12,5 +13,5 @@ Criteria result = Criteria.createCriteria(classe);
 
         result.add(Restrictions.not(restrictions));
         List<Persona> persone = session.find(result);
-}}}
 ...
+}}}
