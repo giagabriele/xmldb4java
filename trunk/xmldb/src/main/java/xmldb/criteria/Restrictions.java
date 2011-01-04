@@ -33,7 +33,7 @@ import xmldb.util.AnnotationHelper;
 public class Restrictions {
 
     public enum Operation {
-        EQ, OR, AND, LIKE, GT,GT_EQ, LT,LT_EQ, ID_EQ, START_WITH,BETWEEN
+        EQ, OR, AND, LIKE, GT,GT_EQ, LT,LT_EQ, ID_EQ, START_WITH,BETWEEN,NOT
     }
     
     private String property;
@@ -82,15 +82,11 @@ public class Restrictions {
             case AND:
                 r1.classe = classe;
                 r2.classe = classe;
-                XPathSintax s1 = r1.getPathSintax();//XPathQueryFactory.create(classe, r1);
-                XPathSintax s2 = r2.getPathSintax();//XPathQueryFactory.create(classe, r2);
-                return XPathQueryFactory.createAnd(s1, s2);
+                return XPathQueryFactory.createAnd(r1.getPathSintax(), r2.getPathSintax());
             case OR:
                 r1.classe = classe;
                 r2.classe = classe;
-                XPathSintax ss1 = r1.getPathSintax();//XPathQueryFactory.create(classe, r1);
-                XPathSintax ss2 = r2.getPathSintax();//XPathQueryFactory.create(classe, r2);
-                return XPathQueryFactory.createOR(ss1, ss2);
+                return XPathQueryFactory.createOR(r1.getPathSintax(), r2.getPathSintax());
             case LIKE:
                 return XPathQueryFactory.createLike(classe, property, value);
             case GT:
@@ -107,7 +103,10 @@ public class Restrictions {
             case START_WITH:
                 return XPathQueryFactory.createStartWith(classe, property, value);
             case BETWEEN:
-                return XPathQueryFactory.createBetween(classe, property, start, end, endIncluded, endIncluded);
+                return XPathQueryFactory.createBetween(classe, property, start, end, startIncluded, endIncluded);
+            case NOT:
+                r1.classe = classe;
+                return XPathQueryFactory.not(r1.getPathSintax());
             default:
                 break;
         }
@@ -225,6 +224,14 @@ public class Restrictions {
      * @return restrictions
      */
     public static Restrictions between(String property,long start,long end,boolean includeStart,boolean includeEnd){
-        return new Restrictions(property, start, end, includeStart, includeStart, Restrictions.Operation.BETWEEN);
+        return new Restrictions(property, start, end, includeStart, includeEnd, Restrictions.Operation.BETWEEN);
+    }
+    /**
+     * Restrinctions di negazione
+     * @param restrictions
+     * @return restrictions
+     */
+    public static Restrictions not(Restrictions restrictions){
+        return new Restrictions(restrictions, restrictions, Restrictions.Operation.NOT);
     }
 }

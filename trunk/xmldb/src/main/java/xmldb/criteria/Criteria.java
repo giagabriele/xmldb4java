@@ -30,7 +30,6 @@ public class Criteria {
 
     protected static final Logger logger = Logger.getLogger(Criteria.class);
     private Class<? extends Object> classe;
-    //protected AnnotationScanner as = null;
     protected XPathQuery queryXPath;
 
     /**
@@ -39,7 +38,6 @@ public class Criteria {
      */
     private Criteria(Class<? extends Object> classe) {
         this.classe = classe;
-        //this.as = AnnotationHelper.get().get(classe);
         this.queryXPath = new XPathQuery(classe);
     }
 
