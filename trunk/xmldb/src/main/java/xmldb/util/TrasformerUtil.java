@@ -154,7 +154,7 @@ public class TrasformerUtil {
                 //creo l'oggetto con un proxy
 
                 if(logger.isDebugEnabled()){
-                    logger.debug("trasformModel Class\t "+classe);
+                    logger.debug("trasformModel Class: "+classe);
                 }
 
                 Object obj = null;

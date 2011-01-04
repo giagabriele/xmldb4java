@@ -32,6 +32,7 @@ import xmldb.exception.XmlDBException;
 import xmldb.interceptor.Interceptor;
 import xmldb.proxy.EnhancerHelper;
 import xmldb.proxy.SessionCalback;
+import xmldb.proxy.SessionProxy;
 import xmldb.session.impl.TransactionSession;
 import xmldb.session.impl.AnnotationSession;
 import xmldb.type.Sequence;
@@ -128,7 +129,8 @@ public class AnnotationSessionFactory implements SessionFactory {
             try {
                 if (transaction) {
                     //con le transazioni
-                    session = EnhancerHelper.createProxy(TransactionSession.class, new SessionCalback());
+                    session = new SessionProxy();
+//                    session = EnhancerHelper.createProxy(TransactionSession.class, new SessionCalback());
                 } else {
                     //session = EnhancerHelper.createProxy(AnnotationSession.class, new SessionCalback());
                     throw new XmlDBException("Abilitare le Transazioni!!!!");
