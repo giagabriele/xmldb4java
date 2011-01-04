@@ -1,0 +1,16 @@
+#summary One-sentence summary of this page.
+
+= Criteria =
+
+...
+{{{
+Criteria result = Criteria.createCriteria(classe);
+        result.add(Restrictions.OR(Restrictions.between("anni", 3,5), Restrictions.lt("anni", 5)));
+        Restrictions restrictions = Restrictions.OR(
+                Restrictions.startWith("nome", "Nome"),
+                Restrictions.AND(Restrictions.like("nome", "Cognome1"), Restrictions.like("nome", "Cognome2")));
+
+        result.add(Restrictions.not(restrictions));
+        List<Persona> persone = session.find(result);
+}}}
+...
