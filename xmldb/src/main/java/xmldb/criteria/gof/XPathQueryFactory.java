@@ -21,6 +21,7 @@ import xmldb.criteria.gof.function.Betwheen;
 import xmldb.criteria.gof.operator.Gt;
 import xmldb.criteria.gof.operator.Eq;
 import xmldb.criteria.gof.function.Like;
+import xmldb.criteria.gof.function.Not;
 import xmldb.criteria.gof.function.OR;
 import xmldb.criteria.gof.function.StartWith;
 import xmldb.criteria.gof.operator.GtEq;
@@ -71,5 +72,9 @@ public class XPathQueryFactory {
 
     public static XPathSintax createBetween(Class classe,String property,long start, long end, boolean incudeStart, boolean incudeEnd) {
        return new Betwheen(classe, property, start, end, incudeStart, incudeEnd);
+    }
+
+    public static XPathSintax not(XPathSintax xPathSintax){
+        return new Not(xPathSintax);
     }
 }
