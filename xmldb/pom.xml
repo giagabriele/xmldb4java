@@ -8,6 +8,12 @@
     <version>1.2</version>
     <name>xmldb</name>
     <url>http://maven.apache.org</url>
+    <scm>
+        <connection>scm:svn:http://xmldb4java.googlecode.com/svn/trunk/</connection>
+        <developerConnection>scm:http://xmldb4java.googlecode.com/svn/trunk/</developerConnection>
+        <url>scm:svn:http://xmldb4java.googlecode.com/svn/trunk/</url>
+    </scm>
+
     <build>
         <plugins>
             <plugin>
@@ -91,4 +97,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changelog-plugin</artifactId>
+                <version>2.2</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
 </project>
