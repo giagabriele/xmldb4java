@@ -92,8 +92,7 @@ public class ReflectionUtils {
      */
     protected static Object getValue(Class<?> clazz, Object value) {
         if (logger.isDebugEnabled()) {
-            logger.debug("input Clazz:" + clazz);
-            logger.debug("input value:" + value);
+            logger.debug("input Clazz:" + clazz+", value:"+value);
         }
         if (value == null) {
             return null;

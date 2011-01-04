@@ -33,6 +33,7 @@ import xmldb.util.ReflectionUtils;
 /**
  * Intercettore sulla {@link Session}
  * @author Giacomo Stefamo Gabriele
+ * @deprecated 
  */
 public class SessionCalback implements MethodInterceptor {
 
