@@ -3,10 +3,10 @@ package xmldb.model;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import xmldb.annotation.Attribute;
-import xmldb.annotation.Entity;
-import xmldb.annotation.ID;
-import xmldb.annotation.OneToMany;
+import org.xmldb.annotation.Attribute;
+import org.xmldb.annotation.Entity;
+import org.xmldb.annotation.ID;
+import org.xmldb.annotation.OneToMany;
 
 /**
  *

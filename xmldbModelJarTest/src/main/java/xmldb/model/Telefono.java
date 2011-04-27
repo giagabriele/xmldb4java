@@ -1,6 +1,6 @@
 package xmldb.model;
 
-import xmldb.annotation.Attribute;
+import org.xmldb.annotation.Attribute;
 
 /**
  *

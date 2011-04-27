@@ -1,7 +1,7 @@
 package xmldb.model;
 
-import xmldb.annotation.Attribute;
-import xmldb.annotation.ManyToOne;
+import org.xmldb.annotation.Attribute;
+import org.xmldb.annotation.ManyToOne;
 
 /**
  *
