@@ -35,7 +35,7 @@
     <xs:element name="sequences">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="sequence" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="Sequence" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -58,7 +58,7 @@
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="sequence">
+    <xs:element name="Sequence">
         <xs:complexType>
             <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name="sequence" type="xs:integer" use="required"/>
