@@ -1,29 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"  
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+    jaxb:extensionBindingPrefixes="xjc" attributeFormDefault="unqualified" jaxb:version="1.0" >
     <xs:element name="xmldb">
         <xs:complexType>
-            <xs:sequence maxOccurs="1">
-                <xs:element name="sequences" minOccurs="1" maxOccurs="1">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="sequence" minOccurs="0" maxOccurs="unbounded">
-                                <xs:complexType>
-                                    <xs:attribute name="id" type="xs:string" use="required"/>
-                                    <xs:attribute name="sequence" type="xs:integer" use="required"/>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                <xs:element name="entities" minOccurs="1" maxOccurs="1">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:any namespace="##any" maxOccurs="unbounded" processContents="skip"></xs:any>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-            </xs:sequence>
+            <xs:all maxOccurs="1">
+                <xs:element ref="schemas" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="sequences" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="entities" minOccurs="1" maxOccurs="1"/>
+            </xs:all>
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="schemas">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="schema"></xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="schema">
+       <xs:complexType>
+           <xs:sequence>
+               <xs:element ref="schema_id" minOccurs="1" maxOccurs="unbounded"/>
+               <xs:element ref="schema_field" minOccurs="1" maxOccurs="unbounded"/>
+           </xs:sequence>
+           <xs:attribute name="name" type="xs:string" use="required"/>
+           <xs:attribute name="class" type="xs:string" use="required"/>
+       </xs:complexType>
+       
+    </xs:element>
+    
+    <xs:element name="sequences">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="sequence" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="entities">
+        <xs:complexType>
+            <xs:sequence>
+                <!--<xs:any namespace="##any" maxOccurs="unbounded" processContents="skip"></xs:any>-->
+                
+                <xs:any maxOccurs="unbounded" processContents="skip">
+             
+                    <xs:annotation>
+                        <xs:appinfo>
+                            <xjc:dom type="dom4j"/>
+                        </xs:appinfo>
+                    </xs:annotation>
+               
+                </xs:any>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="sequence">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="sequence" type="xs:integer" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="schema_id">
+        <xs:complexType>
+            <xs:attributeGroup ref="attributes-schema"></xs:attributeGroup>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="schema_field">
+        <xs:complexType>
+            <xs:attributeGroup ref="attributes-schema"></xs:attributeGroup>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:attributeGroup name="attributes-schema">
+        <xs:attribute name="field" type="xs:string" use="required"></xs:attribute>
+        <xs:attribute name="type" type="xs:string" use="required"></xs:attribute>
+        <xs:attribute name="attribute" type="xs:boolean" use="required"></xs:attribute>
+    </xs:attributeGroup>
 </xs:schema>

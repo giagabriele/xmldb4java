@@ -2,18 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>xmldb</groupId>
+    <groupId>org.xmldb</groupId>
     <artifactId>xmldb</artifactId>
     <packaging>jar</packaging>
-    <version>1.2</version>
+    <version>2</version>
     <name>xmldb</name>
     <url>http://maven.apache.org</url>
-    <scm>
-        <connection>scm:svn:http://xmldb4java.googlecode.com/svn/trunk/</connection>
-        <developerConnection>scm:http://xmldb4java.googlecode.com/svn/trunk/</developerConnection>
-        <url>scm:svn:http://xmldb4java.googlecode.com/svn/trunk/</url>
-    </scm>
-
     <build>
         <plugins>
             <plugin>
@@ -22,10 +16,11 @@
                 <configuration>
                     <source>1.5</source>
                     <target>1.5</target>
-                    <showDeprecation>false</showDeprecation>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -33,78 +28,70 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>javadoc</goal>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
 
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.0</version>
+            <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
+
+
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <version>1.2.9</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils-core</artifactId>
+            <version>1.8.3</version>
+            <scope>compile</scope>
+        </dependency>
+
+
         <dependency>
             <groupId>jaxen</groupId>
             <artifactId>jaxen</artifactId>
-            <version>1.1-beta-6</version>
+            <version>1.1.1</version>
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>2.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>xmldb</groupId>
-            <artifactId>xmldbModelJar</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
+
+
+
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-changelog-plugin</artifactId>
-                <version>2.2</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
 </project>
