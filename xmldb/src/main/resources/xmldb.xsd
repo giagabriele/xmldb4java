@@ -6,7 +6,6 @@
     <xs:element name="xmldb">
         <xs:complexType>
             <xs:all maxOccurs="1">
-                <xs:element ref="schemas" minOccurs="1" maxOccurs="1"/>
                 <xs:element ref="sequences" minOccurs="1" maxOccurs="1"/>
                 <xs:element ref="entities" minOccurs="1" maxOccurs="1"/>
             </xs:all>
