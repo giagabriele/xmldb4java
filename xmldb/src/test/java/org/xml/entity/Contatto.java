@@ -19,9 +19,7 @@ package org.xml.entity;
 import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
@@ -33,13 +31,9 @@ import javax.persistence.Transient;
 public class Contatto {
 
     @Id
-    @GeneratedValue
     private int id;
-    @Column
     private String nome;
-    @Column
     private String cognome;
-    @Column
     private Timestamp ultimaModifica;
     @Transient
     private List<Dettaglio> dettagli = new LinkedList<Dettaglio>();

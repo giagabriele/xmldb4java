@@ -11,7 +11,6 @@ import javax.persistence.Table;
  * @author giacomo
  */
 @Entity
-@Table(name="dettaglio")
 public class Dettaglio {
 
     public static final String TYPE_CELLULARE = "cellulare";
@@ -19,7 +18,6 @@ public class Dettaglio {
     public static final String TYPE_MAIL = "email";
     @Id
     private int id;
-    @Column
     private String dettaglio;
 
     public String getDettaglio() {
