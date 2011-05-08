@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xmldb>
+  <sequences>
+    <Sequence id="Contatto" sequence="2"/>
+  </sequences>
+  <entities>
+    <Contatto id="1">
+      <nome>Giacomo</nome>
+      <cognome>Gabriele</cognome>
+      <ultimaModifica>2011-05-08 22:09:48.681</ultimaModifica>
+    </Contatto>
+    <Contatto id="2">
+      <nome>testSaveTransactionActiveWithCommit</nome>
+      <cognome>Gabriele</cognome>
+      <ultimaModifica>2011-05-08 22:09:48.698</ultimaModifica>
+    </Contatto>
+  </entities>
+</xmldb>
