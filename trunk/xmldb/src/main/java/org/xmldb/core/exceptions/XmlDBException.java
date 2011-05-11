@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -58,7 +60,7 @@ public class XmlDBException extends Exception {
         String message = template;
         int i=0;
         for(String a:args){
-            message = message.replaceAll("{"+i+"}", a);
+            message = message.replace("{"+i+"}", a);
             i++;
         }
 

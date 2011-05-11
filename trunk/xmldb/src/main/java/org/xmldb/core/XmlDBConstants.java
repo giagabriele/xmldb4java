@@ -1,6 +1,6 @@
-package org.xmldb.core;
-
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -16,11 +16,11 @@ package org.xmldb.core;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+package org.xmldb.core;
 
 /**
  * 
- * @author Giacomo Stefano Gabriele<br>
+ * @author Giacomo Stefano Gabriele
  *
  */
 public class XmlDBConstants {

@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -23,6 +25,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import org.xmldb.core.commons.log.LogHelper;
 import org.xmldb.core.exceptions.AnnotationRequiredException;
 
 /**
@@ -33,27 +36,18 @@ public class PersistenceClass {
 
     private Class clazz;
     private String className;
-
     private PersistenteField pkField;
     private List<PersistenteField> persistenteFields;
-
-    private Object objWrap;
-
-    public PersistenceClass(Object objWrap) {
-        this(objWrap.getClass());
-        this.objWrap = objWrap;
-    }
-
 
     public PersistenceClass(Class clazz) {
         this.clazz = clazz;
 
-        if(!clazz.isAnnotationPresent(Entity.class)){
+        if (!clazz.isAnnotationPresent(Entity.class)) {
             throw new AnnotationRequiredException(clazz, Entity.class);
         }
 
         className = clazz.getSimpleName();
-        
+
 //        if(clazz.isAnnotationPresent(Table.class)){
 //            Table table = (Table) clazz.getAnnotation(Table.class);
 //            if(table.name()!=null && table.name().trim().length()>0){
@@ -62,15 +56,18 @@ public class PersistenceClass {
 //        }
 
         persistenteFields = new ArrayList<PersistenteField>();
-        for(Field field:clazz.getDeclaredFields()){
-            if(field.isAnnotationPresent(Id.class)){
-                pkField = new PersistenteField(field.getName());
-            }else if(!field.isAnnotationPresent(Transient.class) && field.getModifiers()!=Modifier.TRANSIENT){
-                persistenteFields.add(new PersistenteField(field.getName()));
+        for (Field field : clazz.getDeclaredFields()) {
+            int mod = field.getModifiers();
+            if (mod == Modifier.PRIVATE || mod == Modifier.PROTECTED) {
+                if (field.isAnnotationPresent(Id.class)) {
+                    pkField = new PersistenteField(field.getName());
+                } else if (!field.isAnnotationPresent(Transient.class) && (field.getModifiers() != Modifier.TRANSIENT)) {
+                    persistenteFields.add(new PersistenteField(field.getName()));
+                }
             }
         }
+        LogHelper.info("instance PersistenceClass");
     }
-
 
     public List<PersistenteField> getPersistenteFields() {
         return persistenteFields;
@@ -88,16 +85,9 @@ public class PersistenceClass {
         return clazz;
     }
 
-    public Object getObjWrap() {
-        return objWrap;
-    }
-
-
 
     @Override
     public String toString() {
         return "PersistenceClass{" + "\nclazz=" + clazz + "\nclassName=" + className + "\npkField=" + pkField + "\npersistenteFields=" + persistenteFields + '}';
     }
-
-
 }

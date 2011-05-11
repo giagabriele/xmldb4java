@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -74,7 +76,9 @@ public class LogHelper {
 
     /* --------------------------------------------------------------------- */
     public static void debug(Object obj, String name) {
-        Logger.getLogger(name).debug(obj);
+        if(Logger.getLogger(name).isDebugEnabled()){
+            Logger.getLogger(name).debug(obj);
+        }
     }
 
     public static void info(Object obj, String name) {

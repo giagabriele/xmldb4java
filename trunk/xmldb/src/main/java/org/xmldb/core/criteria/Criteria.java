@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -18,6 +20,7 @@ package org.xmldb.core.criteria;
 
 import org.xmldb.core.criteria.xpath.XPathSintax;
 import org.apache.log4j.Logger;
+import org.xmldb.core.annotation.PersistenceClassManager;
 import org.xmldb.core.annotation.bean.PersistenceClass;
 import org.xmldb.core.criteria.projections.Projection;
 import org.xmldb.core.criteria.xpath.XPathQuery;
@@ -46,8 +49,8 @@ public class Criteria {
 
     public Criteria add(Restrictions restrictions) {
         if(restrictions!=null){
-            restrictions.persistenceClass = persistenceClass;
-            XPathSintax s = restrictions.getPathSintax();//XPathQueryFactory.create(classe, restrictions);
+            restrictions.setPersistenceClass(persistenceClass);
+            XPathSintax s = restrictions.getPathSintax();
             queryXPath.add(s);
         }
         return this;
@@ -87,6 +90,10 @@ public class Criteria {
     }
 
     public static Criteria createCriteria(Class<? extends Object> classe) {
-        return new Criteria(new PersistenceClass(classe));
+        return new Criteria(getPersistenceClass(classe));
+    }
+
+    private static PersistenceClass getPersistenceClass(Class clazz){
+        return PersistenceClassManager.get(clazz);
     }
 }

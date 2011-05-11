@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,28 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xmldb.core.exceptions;
+
+package org.xmldb.core.annotation;
+
+import java.util.HashMap;
+import java.util.Map;
+import org.xmldb.core.annotation.bean.PersistenceClass;
 
 /**
  *
  * @author Giacomo Stefano Gabriele
  */
-public class ClassNotMapping extends RuntimeException {
+public class PersistenceClassManager {
 
-    private static final long serialVersionUID = -2421278743775378779L;
+    private static final Map<Class,PersistenceClass> mapping = new HashMap<Class, PersistenceClass>();
 
-    public ClassNotMapping(Throwable cause) {
-        super(cause);
-    }
+    public static PersistenceClass get(Class clazz){
+        if(!mapping.containsKey(clazz)){
+            mapping.put(clazz, new PersistenceClass(clazz));
+        }
 
-    public ClassNotMapping(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ClassNotMapping(String message) {
-        super(message);
-    }
-
-    public ClassNotMapping() {
+        return mapping.get(clazz);
     }
 }

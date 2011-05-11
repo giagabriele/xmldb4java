@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -22,7 +24,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.dom4j.Element;
 import org.xmldb.core.XmlDBConstants;
 import org.xmldb.core.annotation.bean.PersistenceClass;
-import org.xmldb.core.commons.log.LogHelper;
 import org.xmldb.core.criteria.Criteria;
 import org.xmldb.core.criteria.Restrictions;
 import org.xmldb.core.exceptions.ElementNotFoundException;
@@ -51,12 +52,11 @@ public class FileSystemXmldbManagerImpl implements  XmldbManager {
         sequenceManager = new SequenceManager(xmlHelper);
     }
 
-    public <T> T merge(PersistenceClass persistenceClass) {
-        try {
-            Object o = persistenceClass.getObjWrap();
+    public <T> T merge(PersistenceClass persistenceClass,Object o) {
+        try {     
 
             Object value = PropertyUtils.getProperty(o, persistenceClass.getPkField().getFieldName());
-            String xpath = createXpathQuery(o.getClass(), value);
+            String xpath = createXpathQuery(persistenceClass, value);
 
             
             if(!xmlHelper.existElement(xpath)){
@@ -88,29 +88,14 @@ public class FileSystemXmldbManagerImpl implements  XmldbManager {
 
         return result;
     }
-//    /**
-//     *
-//     * @param <T>
-//     * @param criteria
-//     * @return
-//     * @throws NonUniqueResultException
-//     */
-//    public <T>T findUnique(Criteria criteria) {
-//        List result = findList(criteria);
-//
-//        if(result.size()>1){
-//            throw  new NonUniqueResultException();
-//        }
-//        return (T) result.get(0);
-//    }
 
     public void remove(PersistenceClass persistenceClass, Object id) {
-        String xpath = createXpathQuery(persistenceClass.getClazz(), id);
+        String xpath = createXpathQuery(persistenceClass, id);
         xmlHelper.removeUnique(xpath);
     }
 
     public <T> T load(PersistenceClass persistenceClass, Object id) {
-        String xpath = createXpathQuery(persistenceClass.getClazz(), id);
+        String xpath = createXpathQuery(persistenceClass, id);
         Element element = xmlHelper.selectSingleNode(xpath);
         if (element == null) {
             throw new ElementNotFoundException(persistenceClass.getClazz(), id, xpath);
@@ -127,15 +112,13 @@ public class FileSystemXmldbManagerImpl implements  XmldbManager {
         xmlHelper.load();
     }
 
-    private String createXpathQuery(Class clazz, Object id) {
-        Criteria c = Criteria.createCriteria(clazz);
+    private String createXpathQuery(PersistenceClass persistenceClass, Object id) {
+        Criteria c = Criteria.createCriteria(persistenceClass.getClazz());
         c.add(Restrictions.idEq(id));
-        
-        LogHelper.debug("XmldbManager.createXpathQuery --->"+c.getXPathQuery(),FileSystemXmldbManagerImpl.class);
         return c.getXPathQuery();
     }
 
-    public void close() {
+    public synchronized void close() {
         xmlHelper.close();
     }
 

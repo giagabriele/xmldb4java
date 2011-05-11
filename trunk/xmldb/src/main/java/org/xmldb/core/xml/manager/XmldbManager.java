@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.xmldb.core.xml.manager;
 
 import java.util.List;
@@ -28,7 +29,7 @@ import org.xmldb.core.criteria.Criteria;
 public interface XmldbManager {
 
     public <T> T load(PersistenceClass persistenceClass, Object id);
-    public <T> T merge(PersistenceClass persistenceClass);
+    public <T> T merge(PersistenceClass persistenceClass,Object obj);
     public void remove(PersistenceClass persistenceClass, Object id);
     public List findList(Criteria criteria);
 

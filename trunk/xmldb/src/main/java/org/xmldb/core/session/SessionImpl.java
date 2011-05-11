@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -17,6 +19,7 @@
 package org.xmldb.core.session;
 
 import java.util.List;
+import org.xmldb.core.annotation.PersistenceClassManager;
 import org.xmldb.core.annotation.bean.PersistenceClass;
 import org.xmldb.core.criteria.Criteria;
 import org.xmldb.core.exceptions.TransactionNotActiveException;
@@ -43,17 +46,17 @@ public class SessionImpl implements Session {
     }
 
     public <T> T merge(Object o) {
-        T t = (T) xmldbManager.merge(new PersistenceClass(o));
+        T t = (T) xmldbManager.merge(getPersistenceClass(o),o);
         checkTransactionIsNotUsed();
         return t;
     }
 
     public <T> T load(Class<?> classe, Object id) {
-        return (T) xmldbManager.load(new PersistenceClass(classe), id);
+        return (T) xmldbManager.load(getPersistenceClass(classe), id);
     }
 
     public void delete(Class<?> classe, Object id) {
-        xmldbManager.remove(new PersistenceClass(classe), id);
+        xmldbManager.remove(getPersistenceClass(classe), id);
         checkTransactionIsNotUsed();
     }
 
@@ -88,5 +91,13 @@ public class SessionImpl implements Session {
 
     public void close() {
        xmldbManager.close();
+    }
+
+    private PersistenceClass getPersistenceClass(Class clazz){
+        return PersistenceClassManager.get(clazz);
+    }
+
+    private PersistenceClass getPersistenceClass(Object obj){
+        return PersistenceClassManager.get(obj.getClass());
     }
 }

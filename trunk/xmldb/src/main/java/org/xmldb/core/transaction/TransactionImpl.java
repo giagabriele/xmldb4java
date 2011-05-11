@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -38,7 +40,7 @@ public class TransactionImpl implements Transaction {
         active = false;
     }
 
-    public void commit() {
+    public synchronized void commit() {
         xmldbManager.commit();
         active = false;
     }

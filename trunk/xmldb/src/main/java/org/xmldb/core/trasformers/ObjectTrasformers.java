@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -20,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultAttribute;
@@ -27,6 +30,7 @@ import org.dom4j.tree.DefaultElement;
 import org.xmldb.core.annotation.bean.PersistenceClass;
 import org.xmldb.core.annotation.bean.PersistenteField;
 import org.xmldb.core.commons.log.LogHelper;
+import org.xmldb.core.commons.util.BeanConvert;
 import org.xmldb.core.exceptions.XmlDBRuntimeException;
 
 /**
@@ -39,10 +43,10 @@ public class ObjectTrasformers<T> implements Trasformers<T> {
 
     public ObjectTrasformers(PersistenceClass persistenceClass) {
         this.persistenceClass = persistenceClass;
+        BeanConvert.configure();
     }
 
     public Element trasformElement(T t) {
-
         try {
             DefaultElement element = new DefaultElement(persistenceClass.getClassName());
 
@@ -83,9 +87,19 @@ public class ObjectTrasformers<T> implements Trasformers<T> {
                 Element e = it.next();
                 bean.put(e.getName(), e.getText());
             }
-
-            LogHelper.debug("trasformModel --> bean:" + bean);
-            BeanUtils.populate(t, bean);
+            //TODO settare le collection in automatico
+            Map<String,String> properties = new HashMap<String, String>();
+            for(String property:bean.keySet()){
+                Class c = PropertyUtils.getPropertyType(t, property);
+                LogHelper.info("---------------the field "+property +" is "+c);
+                if(java.util.Collection.class.isAssignableFrom(c)){
+                    LogHelper.info("---------------the field "+property +" is collection---------");
+                    //bean.remove(property);
+                }else{
+                    properties.put(property, bean.get(property));
+                }
+            }
+            BeanUtils.populate(t, properties);
 
             return t;
         } catch (Exception e) {
