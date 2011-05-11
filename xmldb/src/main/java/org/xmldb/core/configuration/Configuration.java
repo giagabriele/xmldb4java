@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -39,6 +41,18 @@ public class Configuration {
     private static final String NAME_FILE_PROPERTIES = "dbxml";
     private Map<String, String> configuration = new HashMap<String, String>();
 
+    private boolean withoutProperties = false;
+
+    public Configuration() {
+        
+    }
+
+    public Configuration(String connectionUrl) {
+        this.withoutProperties = true;
+        configuration.put(CONNECTION_URL, connectionUrl);
+    }
+
+
 
     public SessionFactory getSessionFactory(){
         checkPropertyRequired(CONNECTION_URL);
@@ -56,7 +70,10 @@ public class Configuration {
      * @throws XmlDBException se non trova il file di properties
      */
     public Configuration buildConfiguration() {
-
+        if(withoutProperties){
+            return this;
+        }
+        
         try {
             ResourceBundle resourceBundle = ResourceBundle.getBundle(NAME_FILE_PROPERTIES);
             Enumeration<String> keys = resourceBundle.getKeys();
@@ -114,10 +131,4 @@ public class Configuration {
      * <b>xmldb.encoding</b>Encoding del dbxml. Facoltativo default UTF-8
      */
     public static final String ENCODING_DB_XML = "xmldb.encoding";
-
-     /**
-     *<b>xmldb.package.mapping.model</b> Package dei model<br>
-     * Possono essere più di uno separati da virgola
-     */
-    public static final String PACKAGE_MAPPING_MODEL = "xmldb.package.mapping.model";
 }

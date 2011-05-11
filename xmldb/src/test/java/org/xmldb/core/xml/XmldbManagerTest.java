@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.xmldb.core.xml;
 
 import org.junit.AfterClass;
@@ -66,7 +67,7 @@ public class XmldbManagerTest {
     public void testMerge() {
         System.out.println("test --> merge");
         Contatto c = new Contatto();
-        Contatto result = instance.merge(new PersistenceClass(c));
+        Contatto result = instance.merge(new PersistenceClass(Contatto.class),c);
 
         assertEquals(c, result);
         
@@ -100,31 +101,4 @@ public class XmldbManagerTest {
 
         Contatto result = instance.load(new PersistenceClass(Contatto.class), 1);
     }
-
-    
-    
-
-//    /**
-//     * Test of commit method, of class FileSystemXmldbManagerImpl.
-//     */
-//    @Test
-//    public void testCommit() {
-//        System.out.println("commit");
-//        instance.commit();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of rollback method, of class FileSystemXmldbManagerImpl.
-//     */
-//    @Test
-//    public void testRollback() {
-//        System.out.println("rollback");
-//        FileSystemXmldbManagerImpl instance = null;
-//        instance.rollback();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-
 }

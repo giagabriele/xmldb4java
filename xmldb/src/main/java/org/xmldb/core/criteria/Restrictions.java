@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -48,7 +50,7 @@ public class Restrictions {
     private Operation operation;
     private Restrictions r1;
     private Restrictions r2;
-    protected PersistenceClass persistenceClass;
+    private PersistenceClass persistenceClass;
 
     
 
@@ -72,6 +74,11 @@ public class Restrictions {
         this.endIncluded = endIncluded;
         this.operation = operation;
     }
+
+    protected void setPersistenceClass(PersistenceClass persistenceClass) {
+        this.persistenceClass = persistenceClass;
+    }
+
 
     public XPathSintax getPathSintax() {
 

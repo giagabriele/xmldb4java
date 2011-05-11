@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -25,6 +27,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.dom4j.tree.DefaultElement;
 import org.xmldb.core.commons.log.LogHelper;
 import org.xmldb.core.exceptions.XmlDBRuntimeException;
 
@@ -36,12 +39,13 @@ import static org.xmldb.core.XmlDBConstants.*;
  */
 public class XmlHelper {
 
-    protected static final String XPATH_SEQUENCES = "//" + ELEMENT_SEQUENCES;
-    protected static final String XPATH_SEQUENCE = "//Sequence";
-    protected static final String XPATH_ENTITIES = "//" + ELEMENT_ENTITIES;
     private String path;
     private File file;
     private Document document;
+
+    private Element rootSequences;
+    private Element rootEntities;
+
     private String codifica;
 
     public XmlHelper(String filePath) {
@@ -70,21 +74,23 @@ public class XmlHelper {
     }
 
     public void mergeSequence(Element element) {
-        Element rootSequeneces = selectSingleNode(XPATH_SEQUENCES);
-        Element holdSequence = selectSingleNode("//Sequence[@id='" + element.attributeValue("id") + "']");
+        Element holdSequence = (Element) findSequence(element.attributeValue("id"));
         if (holdSequence != null) {
             holdSequence.detach();
         }
 
-        rootSequeneces.add(element);
+        rootSequences.add(element);
+    }
+
+    public Element findSequence(String id){
+        return (Element) rootSequences.selectSingleNode("//Sequence[@id='" + id+ "']");
     }
 
     public void addEntity(Element element) {
         if (element == null) {
             return;
         }
-        Element rootSequeneces = selectSingleNode(XPATH_ENTITIES);
-        rootSequeneces.add(element);
+        rootEntities.add(element);
     }
 
     public boolean removeUnique(String xpathQuery) {
@@ -95,7 +101,7 @@ public class XmlHelper {
         return true;
     }
 
-    public void save() {
+    public synchronized void save() {
         try {
             OutputFormat outformat = OutputFormat.createPrettyPrint();
             outformat.setEncoding(codifica);
@@ -110,7 +116,7 @@ public class XmlHelper {
         }
     }
 
-    public final void load() {
+    public synchronized final void load() {
         try {
             SAXReader reader = new SAXReader();
             file = new File(path);
@@ -119,11 +125,16 @@ public class XmlHelper {
                 document = DocumentHelper.createDocument();
                 document.addElement(ROOT_ELEMENT);
 
-                document.getRootElement().addElement(ELEMENT_SEQUENCES);
-                document.getRootElement().addElement(ELEMENT_ENTITIES);
+                rootSequences = new DefaultElement(ELEMENT_SEQUENCES);
+                rootEntities = new DefaultElement(ELEMENT_ENTITIES);
+
+                document.getRootElement().add(rootSequences);
+                document.getRootElement().add(rootEntities);
 
             } else {
                 document = reader.read(file);
+                rootSequences = (Element) document.selectSingleNode("//"+ELEMENT_SEQUENCES);
+                rootEntities  = (Element) document.selectSingleNode("//"+ELEMENT_ENTITIES);
             }
         } catch (Exception e) {
             throw new XmlDBRuntimeException(e);
@@ -133,13 +144,6 @@ public class XmlHelper {
     public void close(){
         LogHelper.info("Closing ....",XmlHelper.class);
     }
-
-//    protected String buildXpath(Element e) {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("//");
-//        sb.append(e.getName());
-//        return sb.toString();
-//    }
 
     @Override
     public String toString() {

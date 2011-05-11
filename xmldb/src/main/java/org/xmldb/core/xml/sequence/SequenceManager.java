@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,15 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package org.xmldb.core.xml.sequence;
 
 import org.dom4j.Element;
 import org.xmldb.core.annotation.bean.PersistenceClass;
 import org.xmldb.core.commons.log.LogHelper;
-import org.xmldb.core.criteria.Criteria;
-import org.xmldb.core.criteria.Restrictions;
 import org.xmldb.core.trasformers.SequenceTrasformers;
 import org.xmldb.core.trasformers.Trasformers;
 import org.xmldb.core.type.Sequence;
@@ -42,7 +40,7 @@ public class SequenceManager {
 
     private Sequence getSequence(String id){
         
-        Element element = xmlHelper.selectSingleNode(getXpath(id));
+        Element element = xmlHelper.findSequence(id);
         if( element == null){
             return null;
         }
@@ -53,7 +51,7 @@ public class SequenceManager {
         return s;
     }
 
-    public int nextId(PersistenceClass persistenceClass){
+    public synchronized  int nextId(PersistenceClass persistenceClass){
         Sequence s = getSequence(persistenceClass.getClassName());
         if(s == null){
             s = new Sequence();
@@ -70,16 +68,8 @@ public class SequenceManager {
         Trasformers<Sequence> trasf = new SequenceTrasformers();
         Element element = trasf.trasformElement(s);
 
-        LogHelper.debug("Element:\n"+element.asXML(),SequenceManager.class);
+        LogHelper.debug("Element: --> "+element.asXML(),SequenceManager.class);
 
         xmlHelper.mergeSequence(element);
     }
-
-    private String getXpath(String id){
-        Criteria criteria = Criteria.createCriteria(Sequence.class);
-        criteria.add(Restrictions.idEq(id));
-        return criteria.getXPathQuery();
-    }
-
-    
 }

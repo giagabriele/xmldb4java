@@ -1,4 +1,6 @@
 /*
+ * Copyright 2011 Giacomo Stefano Gabriele
+ *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -17,6 +19,7 @@
 package org.xml.entity;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -24,8 +27,8 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 
 /**
- *
- * @author giacomo
+ * 
+ * @author Giacomo Stefano Gabriele
  */
 @Entity
 public class Contatto {
@@ -35,6 +38,11 @@ public class Contatto {
     private String nome;
     private String cognome;
     private Timestamp ultimaModifica;
+    private String vetor[] = new String[]{"A","B","C"};
+    private Byte[] valori = new Byte[]{0,1,2,3};
+    private Long[] valoriLong = new Long[]{100L,200L,300L};
+
+    private List<String> list = new ArrayList<String>();
     @Transient
     private List<Dettaglio> dettagli = new LinkedList<Dettaglio>();
 
@@ -43,6 +51,10 @@ public class Contatto {
         nome = "Giacomo";
         cognome = "Gabriele";
         ultimaModifica = new Timestamp(System.currentTimeMillis());
+        
+        list.add("LIST1");
+        list.add("LIST2");
+        list.add("LIST3");
     }
 
     public String getCognome() {
@@ -87,34 +99,46 @@ public class Contatto {
         this.dettagli = dettagli;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Contatto other = (Contatto) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return true;
+    public String[] getVetor() {
+        return vetor;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 67 * hash + this.id;
-        return hash;
+    public void setVetor(String[] vetor) {
+        this.vetor = vetor;
+    }
+
+    public List<String> getList() {
+        return list;
+    }
+
+    public void setList(List<String> list) {
+        this.list = list;
+    }
+
+    public Byte[] getValori() {
+        return valori;
+    }
+
+    public void setValori(Byte[] valori) {
+        this.valori = valori;
+    }
+
+    public Long[] getValoriLong() {
+        return valoriLong;
+    }
+
+    public void setValoriLong(Long[] valoriLong) {
+        this.valoriLong = valoriLong;
     }
 
     
 
     @Override
     public String toString() {
-        return "Contatto{" + "\nid=" + id + "\nnome=" + nome + "\ncognome=" + cognome + "\nultimaModifica=" + ultimaModifica + "\ndettagli=" + dettagli + "\n}";
+        return "Contatto{" + "\nid=" + id + "\nnome=" + nome + "\ncognome=" + cognome + "\nultimaModifica=" + ultimaModifica + "\nvetor=" + vetor + "\nlist=" + list + "\ndettagli=" + dettagli + '}';
     }
 
+    
 
+  
 }
