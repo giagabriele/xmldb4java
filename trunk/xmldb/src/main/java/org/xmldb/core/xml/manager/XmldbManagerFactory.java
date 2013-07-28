@@ -61,11 +61,11 @@ public class XmldbManagerFactory {
 
     private static XmldbManager creteConcreteXmldbManager(String type,String path,String codifica){
         if(XmlDBConstants.ENGINE_LOCALE.equals(type)){
-            return new FileSystemXmldbManagerImpl(path);
+            return new FileSystemXmldbManagerImpl(path,codifica);
         }
 
         if(XmlDBConstants.ENGINE_MEMORY.equals(type)){
-            return new MemoryXmldbManagerImpl(path);
+            return new MemoryXmldbManagerImpl(path,codifica);
         }
 
         throw new XmlDBRuntimeException(ErrorCode.ERRORE_ENGINE,type);

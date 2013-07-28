@@ -120,6 +120,7 @@ public class XmlHelper {
         try {
             SAXReader reader = new SAXReader();
             file = new File(path);
+            LogHelper.info("Database --> "+file.getAbsolutePath());
             if (!file.exists()) {
                 LogHelper.info("Document not exist! Create...");
                 document = DocumentHelper.createDocument();
