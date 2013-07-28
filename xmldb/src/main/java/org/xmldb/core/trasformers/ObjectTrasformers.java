@@ -91,9 +91,9 @@ public class ObjectTrasformers<T> implements Trasformers<T> {
             Map<String,String> properties = new HashMap<String, String>();
             for(String property:bean.keySet()){
                 Class c = PropertyUtils.getPropertyType(t, property);
-                LogHelper.info("---------------the field "+property +" is "+c);
+                LogHelper.debug("---------------the field "+property +" is "+c,this.getClass());
                 if(java.util.Collection.class.isAssignableFrom(c)){
-                    LogHelper.info("---------------the field "+property +" is collection---------");
+                    LogHelper.debug("---------------the field "+property +" is collection---------",this.getClass());
                     //bean.remove(property);
                 }else{
                     properties.put(property, bean.get(property));
